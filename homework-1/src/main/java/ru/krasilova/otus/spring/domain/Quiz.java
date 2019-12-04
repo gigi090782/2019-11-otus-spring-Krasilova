@@ -1,12 +1,13 @@
 package ru.krasilova.otus.spring.domain;
 
-import java.util.ArrayList;
+
+import java.util.List;
 
 public class Quiz {
     private Student student;
     private int correctAnswersCount;
     private int wrongAnswersCount;
-    private ArrayList<Question> questions;
+    private List<Question> questions;
 
     public Quiz() {
     }
@@ -35,11 +36,11 @@ public class Quiz {
         this.wrongAnswersCount++;
     }
 
-    public ArrayList<Question> getQuestions() {
+    public List<Question> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(ArrayList<Question> questions) {
+    public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
 }

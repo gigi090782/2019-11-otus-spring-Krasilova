@@ -19,9 +19,9 @@ public class UserInterfaceServiceImpl implements UserInterfaceService {
     }
 
     @Override
-    public String askQuestion(Question question) {
-        String answerStudent = "";
-        System.out.println("Вопрос №%d: %s "+question.getTextQuestion());
+    public String askQuestion(Question question, int numberQuestion) {
+        String answerStudent;
+        System.out.printf("Вопрос №%d: %s ", numberQuestion, question.getTextQuestion());
         answerStudent = scanner.nextLine();
         return answerStudent;
     }

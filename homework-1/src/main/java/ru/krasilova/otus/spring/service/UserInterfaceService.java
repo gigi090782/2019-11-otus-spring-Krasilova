@@ -5,5 +5,5 @@ import ru.krasilova.otus.spring.domain.Student;
 
 public interface UserInterfaceService {
     public Student getRegistrationStudent();
-    public String askQuestion(Question question);
+    public String askQuestion(Question question, int numberQuestion);
 }

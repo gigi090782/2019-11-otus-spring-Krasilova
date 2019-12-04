@@ -9,7 +9,7 @@ import ru.krasilova.otus.spring.domain.Student;
 
 public class QuizServiceImpl  implements QuizService {
 
-    private QuestionDao questionDao;
+    private final QuestionDao questionDao;
     private UserInterfaceService userInterfaceService;
 
 
@@ -44,11 +44,11 @@ public class QuizServiceImpl  implements QuizService {
     public void runQuiz(Quiz quiz) {
 
         int questionNumber = 1;
-        String answerStudent="";
+        String answerStudent;
 
         for(Question question: quiz.getQuestions())
         {
-            answerStudent = userInterfaceService.askQuestion(question);
+            answerStudent = userInterfaceService.askQuestion(question, questionNumber);
             if (answerStudent.equals(question.getTextAnswer())) {
                 quiz.increaseCorrectAnswersCount();
             }
