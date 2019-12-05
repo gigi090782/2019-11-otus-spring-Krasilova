@@ -5,6 +5,7 @@ import ru.krasilova.otus.spring.domain.Question;
 import ru.krasilova.otus.spring.domain.Quiz;
 import ru.krasilova.otus.spring.domain.Student;
 
+import javax.management.InvalidApplicationException;
 
 
 public class QuizServiceImpl  implements QuizService {
@@ -27,13 +28,13 @@ public class QuizServiceImpl  implements QuizService {
         quiz.setStudent(student);
     };
 
-    public void setQuestions (Quiz quiz)
-    {
-      quiz.setQuestions(questionDao.getQuestions());
+    public void setQuestions (Quiz quiz) throws Exception {
+
+        quiz.setQuestions(questionDao.getQuestions());
     }
 
     @Override
-    public Quiz createQuiz() {
+    public Quiz createQuiz() throws Exception {
         Quiz quiz = new Quiz();
         registerStudent(quiz);
         setQuestions(quiz);
@@ -43,11 +44,11 @@ public class QuizServiceImpl  implements QuizService {
     @Override
     public void runQuiz(Quiz quiz) {
 
-        int questionNumber = 1;
+        int questionNumber = 0;
         String answerStudent;
 
         for(Question question: quiz.getQuestions())
-        {
+        {    questionNumber++;
             answerStudent = userInterfaceService.askQuestion(question, questionNumber);
             if (answerStudent.equals(question.getTextAnswer())) {
                 quiz.increaseCorrectAnswersCount();
@@ -59,7 +60,6 @@ public class QuizServiceImpl  implements QuizService {
         }
 
 
-        System.out.println(quiz.getQuestions().size());
 
     }
 

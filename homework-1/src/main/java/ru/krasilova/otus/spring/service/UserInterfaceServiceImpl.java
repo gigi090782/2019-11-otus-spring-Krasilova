@@ -6,7 +6,7 @@ import ru.krasilova.otus.spring.domain.Student;
 import java.util.Scanner;
 
 public class UserInterfaceServiceImpl implements UserInterfaceService {
-    private static Scanner scanner = new Scanner(System.in);
+    private final static Scanner scanner = new Scanner(System.in);
 
     @Override
     public Student getRegistrationStudent() {

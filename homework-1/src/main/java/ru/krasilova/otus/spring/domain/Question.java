@@ -9,6 +9,7 @@ public class Question {
         this.textAnswer = textAnswer;
     }
     public void setTextQuestion(String textQuestion ) {
+
         this.textQuestion =  textQuestion;
     }
 
@@ -16,10 +17,12 @@ public class Question {
         this.textAnswer =  textAnswer;
     }
     public String getTextQuestion() {
+
         return textQuestion;
     }
 
     public String getTextAnswer() {
+
         return textAnswer;
     }
 }
