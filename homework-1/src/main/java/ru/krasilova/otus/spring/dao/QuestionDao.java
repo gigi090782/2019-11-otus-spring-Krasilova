@@ -2,8 +2,6 @@ package ru.krasilova.otus.spring.dao;
 
 import ru.krasilova.otus.spring.domain.Question;
 
-import javax.management.InvalidApplicationException;
-import java.util.ArrayList;
 import java.util.List;
 
 public interface QuestionDao {

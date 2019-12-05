@@ -13,15 +13,16 @@ public class Student {
         this.lastname = lastname;
     }
 
-    public void setFirstName(String firstname ) {
+    public void setFirstName(String firstname) {
 
-        this.firstname =  firstname;
+        this.firstname = firstname;
     }
 
-    public void setLastName( String lastname ) {
+    public void setLastName(String lastname) {
 
-        this.lastname =  lastname;
+        this.lastname = lastname;
     }
+
     public String getFirstName() {
 
         return firstname;

@@ -4,8 +4,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.krasilova.otus.spring.domain.Quiz;
 import ru.krasilova.otus.spring.service.QuizService;
 
-import javax.management.InvalidApplicationException;
-
 public class Main {
 
     public static void main(String[] args) throws Exception {

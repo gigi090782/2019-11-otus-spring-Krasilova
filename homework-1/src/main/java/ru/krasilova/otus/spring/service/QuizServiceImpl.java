@@ -5,30 +5,28 @@ import ru.krasilova.otus.spring.domain.Question;
 import ru.krasilova.otus.spring.domain.Quiz;
 import ru.krasilova.otus.spring.domain.Student;
 
-import javax.management.InvalidApplicationException;
 
-
-public class QuizServiceImpl  implements QuizService {
+public class QuizServiceImpl implements QuizService {
 
     private final QuestionDao questionDao;
     private UserInterfaceService userInterfaceService;
 
 
-    public QuizServiceImpl (QuestionDao questionDao, UserInterfaceService userInterfaceService)
-    {
+    public QuizServiceImpl(QuestionDao questionDao, UserInterfaceService userInterfaceService) {
         this.questionDao = questionDao;
         this.userInterfaceService = userInterfaceService;
     }
 
 
-    private void registerStudent(Quiz quiz)
-    {
+    private void registerStudent(Quiz quiz) {
         Student student = new Student();
         student = userInterfaceService.getRegistrationStudent();
         quiz.setStudent(student);
-    };
+    }
 
-    public void setQuestions (Quiz quiz) throws Exception {
+    ;
+
+    public void setQuestions(Quiz quiz) throws Exception {
 
         quiz.setQuestions(questionDao.getQuestions());
     }
@@ -47,18 +45,16 @@ public class QuizServiceImpl  implements QuizService {
         int questionNumber = 0;
         String answerStudent;
 
-        for(Question question: quiz.getQuestions())
-        {    questionNumber++;
+        for (Question question : quiz.getQuestions()) {
+            questionNumber++;
             answerStudent = userInterfaceService.askQuestion(question, questionNumber);
             if (answerStudent.equals(question.getTextAnswer())) {
                 quiz.increaseCorrectAnswersCount();
-            }
-            else {
+            } else {
                 quiz.increaseWrongAnswersCount();
             }
 
         }
-
 
 
     }
@@ -66,8 +62,8 @@ public class QuizServiceImpl  implements QuizService {
     @Override
     public void showResult(Quiz quiz) {
         System.out.println("Результаты тестирования:");
-        System.out.format("Фамилия и имя студента: %s %s \n",  quiz.getStudent().getLastName(),quiz.getStudent().getFirstName());
-        System.out.format("Правильных ответов - %d, неправильных ответов - %d", quiz.getCorrectAnswersCount() , quiz.getWrongAnswersCount());
+        System.out.format("Фамилия и имя студента: %s %s \n", quiz.getStudent().getLastName(), quiz.getStudent().getFirstName());
+        System.out.format("Правильных ответов - %d, неправильных ответов - %d", quiz.getCorrectAnswersCount(), quiz.getWrongAnswersCount());
     }
 }
 
