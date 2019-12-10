@@ -1,35 +1,38 @@
 package ru.krasilova.otus.spring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
-import ru.krasilova.otus.spring.config.Config;
+import ru.krasilova.otus.spring.configuration.Config;
 import ru.krasilova.otus.spring.dao.QuestionDao;
 import ru.krasilova.otus.spring.domain.Question;
 import ru.krasilova.otus.spring.domain.Quiz;
 import ru.krasilova.otus.spring.domain.Student;
 
-@Configuration
 @Service
 public class QuizServiceImpl implements QuizService {
 
     private final QuestionDao questionDao;
     private final UserInterfaceService userInterfaceService;
+    private final MessageService messageService;
     private final Config config;
 
     @Autowired
-    public QuizServiceImpl(QuestionDao questionDao, UserInterfaceService userInterfaceService, Config config) {
-        this.questionDao = questionDao;
+    public QuizServiceImpl(QuestionDao questionDao,
+                           UserInterfaceService userInterfaceService,
+                           MessageService messageService,
+                           Config config) {
+
         this.userInterfaceService = userInterfaceService;
+        this.messageService = messageService;
+        this.questionDao = questionDao;
         this.config = config;
-        this.config.setLocale();
     }
 
 
     private void registerStudent(Quiz quiz) {
         Student student = new Student();
-        student = userInterfaceService.getRegistrationStudent(config.getMessageSource("question.firstname"),
-                config.getMessageSource("question.lastname"));
+        student = userInterfaceService.getRegistrationStudent(messageService.getMessage("question.firstname"),
+                messageService.getMessage("question.lastname"));
         quiz.setStudent(student);
     }
 
@@ -37,7 +40,7 @@ public class QuizServiceImpl implements QuizService {
 
     public void setQuestions(Quiz quiz) throws Exception {
 
-        quiz.setQuestions(questionDao.getQuestions(config.getMessageSource("path.questions")));
+        quiz.setQuestions(questionDao.getQuestions());
     }
 
     @Override
@@ -68,16 +71,18 @@ public class QuizServiceImpl implements QuizService {
     public void showResult(Quiz quiz) {
         String result;
         if (quiz.getCorrectAnswersCount() >= config.getCountCorrectAnswersToOk()) {
-            result = config.getMessageSource("result.ok");
+            result = messageService.getMessage("result.ok");
         } else {
-            result = config.getMessageSource("result.failed");
+            result = messageService.getMessage("result.failed");
         }
         ;
-        System.out.format(config.getMessageSource("result.show"),
-                quiz.getStudent().getLastName().toUpperCase() + " " + quiz.getStudent().getFirstName().toUpperCase(),
-                quiz.getCorrectAnswersCount(),
-                quiz.getWrongAnswersCount(),
-                result);
+        Object[] formatResult = new Object[4];
+        formatResult[0] = quiz.getStudent().getLastName().toUpperCase() + " " + quiz.getStudent().getFirstName().toUpperCase();
+        formatResult[1] = quiz.getCorrectAnswersCount();
+        formatResult[2] = quiz.getWrongAnswersCount();
+        formatResult[3] = result;
+        userInterfaceService.showResult(messageService.getMessageFormat("result.show", formatResult));
+
     }
 }
 

@@ -29,4 +29,9 @@ public class UserInterfaceServiceImpl implements UserInterfaceService {
         answerStudent = scanner.nextLine();
         return answerStudent;
     }
+
+    @Override
+    public void showResult(String resultStr) {
+        System.out.printf(resultStr);
+    }
 }

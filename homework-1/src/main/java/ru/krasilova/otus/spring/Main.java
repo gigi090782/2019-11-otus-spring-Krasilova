@@ -4,10 +4,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import ru.krasilova.otus.spring.config.Config;
 import ru.krasilova.otus.spring.domain.Quiz;
 import ru.krasilova.otus.spring.service.QuizService;
 
+@EnableAspectJAutoProxy
 @Configuration
 @ComponentScan
 @PropertySource("classpath:config.properties")
@@ -30,11 +30,9 @@ public class Main {
         AnnotationConfigApplicationContext context =
                 new AnnotationConfigApplicationContext(Main.class);
         QuizService service = context.getBean(QuizService.class);
-
         Quiz quiz = service.createQuiz();
         service.runQuiz(quiz);
         service.showResult(quiz);
-
 
     }
 }
