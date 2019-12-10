@@ -13,19 +13,23 @@ public class QuestionDaoCsv implements QuestionDao {
 
     @Override
     public List<Question> getQuestions(String fileName) throws Exception {
-        List<Question> questions = new ArrayList<>();
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
-        Scanner scanner = new Scanner(inputStream);
-        while (scanner.hasNext()) {
 
-            String[] line = scanner.nextLine().split(";");
-            if (line.length != 2)
-                throw new NotCorrectFileWithQuestionsException("Некорректные данные");
-            questions.add(new Question(line[0], line[1]));
+        try {
+            List<Question> questions = new ArrayList<>();
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
+            Scanner scanner = new Scanner(inputStream);
+            while (scanner.hasNext()) {
 
+                String[] line = scanner.nextLine().split(";");
+                questions.add(new Question(line[0], line[1]));
+
+            }
+            return questions;
+        } catch (Exception e) {
+            throw new NotCorrectFileWithQuestionsException("Не удалось прочитать вопросы", e);
         }
 
-
-        return questions;
     }
+
+
 }
