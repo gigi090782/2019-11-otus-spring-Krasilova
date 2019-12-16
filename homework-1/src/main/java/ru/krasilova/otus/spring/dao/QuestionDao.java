@@ -5,5 +5,5 @@ import ru.krasilova.otus.spring.domain.Question;
 import java.util.List;
 
 public interface QuestionDao {
-    public List<Question> getQuestions() throws Exception;
+    public List<Question> getQuestions(String fileName) throws Exception;
 }
