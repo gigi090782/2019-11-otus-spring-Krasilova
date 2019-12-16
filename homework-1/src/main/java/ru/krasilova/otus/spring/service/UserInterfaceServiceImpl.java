@@ -7,7 +7,6 @@ import ru.krasilova.otus.spring.domain.Student;
 
 import java.util.Scanner;
 
-@Configuration
 @Service
 public class UserInterfaceServiceImpl implements UserInterfaceService {
     private final static Scanner scanner = new Scanner(System.in);
@@ -25,13 +24,13 @@ public class UserInterfaceServiceImpl implements UserInterfaceService {
     @Override
     public String askQuestion(Question question, int numberQuestion) {
         String answerStudent;
-        System.out.printf(question.getTextQuestion());
+        System.out.print(question.getTextQuestion());
         answerStudent = scanner.nextLine();
         return answerStudent;
     }
 
     @Override
     public void showResult(String resultStr) {
-        System.out.printf(resultStr);
+        System.out.print(resultStr);
     }
 }

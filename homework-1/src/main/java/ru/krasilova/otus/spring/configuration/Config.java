@@ -9,13 +9,16 @@ import java.util.Locale;
 @Component
 public class Config {
 
-    private Locale locale;
-
     @Value("${config.local}")
     private String localeStr;
 
     @Value("${count.answers}")
     private int countCorrectAnswersToOk;
+
+
+    @Value("${filename.pattern}")
+    private String filenamePattern;
+
 
 
     public Locale getLocale() {
@@ -26,6 +29,10 @@ public class Config {
 
     public int getCountCorrectAnswersToOk() {
         return countCorrectAnswersToOk;
+    }
+
+    public String getFilenamePattern() {
+        return filenamePattern;
     }
 }
 
