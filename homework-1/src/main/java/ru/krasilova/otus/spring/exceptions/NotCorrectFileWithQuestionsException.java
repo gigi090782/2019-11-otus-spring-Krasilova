@@ -9,7 +9,3 @@ public class NotCorrectFileWithQuestionsException extends Exception {
         super(message, cause);
     }
 }
-
-
-
-

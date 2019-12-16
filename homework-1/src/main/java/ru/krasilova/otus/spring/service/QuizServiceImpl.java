@@ -40,7 +40,7 @@ public class QuizServiceImpl implements QuizService {
 
     public void setQuestions(Quiz quiz) throws Exception {
 
-        quiz.setQuestions(questionDao.getQuestions());
+        quiz.setQuestions(questionDao.getQuestions("questionsErr.csv"));
     }
 
     @Override
