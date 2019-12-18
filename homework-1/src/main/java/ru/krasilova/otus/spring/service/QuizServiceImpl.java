@@ -2,7 +2,7 @@ package ru.krasilova.otus.spring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.krasilova.otus.spring.configuration.Config;
+import ru.krasilova.otus.spring.configuration.ConfigAnswers;
 import ru.krasilova.otus.spring.dao.QuestionDao;
 import ru.krasilova.otus.spring.domain.Question;
 import ru.krasilova.otus.spring.domain.Quiz;
@@ -14,23 +14,25 @@ public class QuizServiceImpl implements QuizService {
     private final QuestionDao questionDao;
     private final UserInterfaceService userInterfaceService;
     private final MessageService messageService;
-    private final Config config;
+    private final ConfigAnswers configAnswers;
 
     @Autowired
     public QuizServiceImpl(QuestionDao questionDao,
                            UserInterfaceService userInterfaceService,
                            MessageService messageService,
-                           Config config) {
+                           ConfigAnswers configAnswers) {
 
         this.userInterfaceService = userInterfaceService;
         this.messageService = messageService;
         this.questionDao = questionDao;
-        this.config = config;
+        this.configAnswers = configAnswers;
     }
 
 
     private void registerStudent(Quiz quiz) {
         Student student = new Student();
+
+
         student = userInterfaceService.getRegistrationStudent(messageService.getMessage("question.firstname"),
                 messageService.getMessage("question.lastname"));
         quiz.setStudent(student);
@@ -40,7 +42,7 @@ public class QuizServiceImpl implements QuizService {
 
     public void setQuestions(Quiz quiz) throws Exception {
 
-        quiz.setQuestions(questionDao.getQuestions("questionsErr.csv"));
+        quiz.setQuestions(questionDao.getQuestions());
     }
 
     @Override
@@ -70,7 +72,7 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public void showResult(Quiz quiz) {
         String result;
-        if (quiz.getCorrectAnswersCount() >= config.getCountCorrectAnswersToOk()) {
+        if (quiz.getCorrectAnswersCount() >= configAnswers.getCountToOk()) {
             result = messageService.getMessage("result.ok");
         } else {
             result = messageService.getMessage("result.failed");

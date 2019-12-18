@@ -1,4 +1,4 @@
-package ru.krasilova.otus.spring.exceptions;
+package ru.krasilova.otus.spring.exception;
 
 public class NotCorrectFileWithQuestionsException extends Exception {
     public NotCorrectFileWithQuestionsException(String message) {
@@ -9,3 +9,7 @@ public class NotCorrectFileWithQuestionsException extends Exception {
         super(message, cause);
     }
 }
+
+
+
+

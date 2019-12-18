@@ -1,9 +1,10 @@
 package ru.krasilova.otus.spring.dao;
 
 import org.springframework.stereotype.Repository;
-import ru.krasilova.otus.spring.configuration.Config;
+import ru.krasilova.otus.spring.configuration.ConfigFilePath;
+import ru.krasilova.otus.spring.configuration.ConfigLocale;
 import ru.krasilova.otus.spring.domain.Question;
-import ru.krasilova.otus.spring.exceptions.NotCorrectFileWithQuestionsException;
+import ru.krasilova.otus.spring.exception.NotCorrectFileWithQuestionsException;
 
 
 import java.io.InputStream;
@@ -14,15 +15,20 @@ import java.util.Scanner;
 @Repository("questionDao")
 public class QuestionDaoCsv implements QuestionDao {
 
-    private final  Config config;
-    public QuestionDaoCsv(Config config) {
-        this.config = config;
+    private final ConfigLocale configLocale;
+    private final ConfigFilePath configFilePath;
+
+
+    public  QuestionDaoCsv(ConfigLocale configLocale,
+                           ConfigFilePath configFilePath)
+    {this.configLocale = configLocale;
+     this.configFilePath = configFilePath;
 
     }
 
     @Override
     public List<Question> getQuestions() throws Exception {
-        String filePath = String.format(config.getFilenamePattern(), config.getLocale().toString());
+        String filePath = String.format(this.configFilePath.getPattern(), this.configLocale.getLocale().toString());;
         try {
             List<Question> questions = new ArrayList<>();
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
@@ -34,7 +40,9 @@ public class QuestionDaoCsv implements QuestionDao {
 
             }
             return questions;
-        } catch (Exception e) {
+        } catch (Exception e)
+
+        {
             throw new NotCorrectFileWithQuestionsException("Не удалось прочитать вопросы", e);
         }
 

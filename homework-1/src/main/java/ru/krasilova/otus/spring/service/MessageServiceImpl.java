@@ -1,34 +1,34 @@
 package ru.krasilova.otus.spring.service;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+
 import org.springframework.stereotype.Service;
-import ru.krasilova.otus.spring.configuration.Config;
+import ru.krasilova.otus.spring.configuration.ConfigLocale;
 
 @Service
-public class MessageServiceImpl implements MessageService {
+public class MessageServiceImpl implements MessageService  {
 
-    private final MessageSource messageSource;
-    private final Config config;
+    private  MessageSource messageSource ;
+    private final ConfigLocale configLocale;
 
-    public MessageServiceImpl(MessageSource messageSource, Config config) {
+    public MessageServiceImpl(MessageSource messageSource , ConfigLocale configLocale) {
         this.messageSource = messageSource;
-        this.config = config;
-    }
+        this.configLocale = configLocale;
 
-    ;
+    };
 
     @Override
-    public String getMessage(String keyString) {
-        String message = messageSource.getMessage(keyString, null, config.getLocale());
+    public String getMessage(String keyString)
+    {
+        String message = messageSource.getMessage(keyString,null, configLocale.getLocale());
         return message;
     }
 
     @Override
-    public String getMessageFormat(String keyString, Object[] objectsFormat) {
-
-        String message = messageSource.getMessage(keyString, objectsFormat, config.getLocale());
+    public String getMessageFormat(String keyString, Object[] objectsFormat)
+    {
+        String message = messageSource.getMessage(keyString,objectsFormat, configLocale.getLocale());
         return message;
     }
 }
