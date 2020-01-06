@@ -11,12 +11,11 @@ import ru.krasilova.otus.spring.homework5.models.Book;
 import ru.krasilova.otus.spring.homework5.models.Genre;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Repository для работы с книгами должно")
 @JdbcTest
 @Import({BookReposiryJdbc.class, GenreRepositoryJdbc.class,AuthorRepositoryJdbc.class })
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+
 class BookReposiryJdbcTest {
 
     private static final int EXPECTED_BOOKS_COUNT = 2;

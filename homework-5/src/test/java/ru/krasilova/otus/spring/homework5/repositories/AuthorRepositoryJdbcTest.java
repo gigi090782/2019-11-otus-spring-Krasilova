@@ -1,7 +1,5 @@
 package ru.krasilova.otus.spring.homework5.repositories;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +10,6 @@ import ru.krasilova.otus.spring.homework5.models.Author;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Repository для работы с авторами должно")
 @JdbcTest
 @Import(AuthorRepositoryJdbc.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+
 
 class AuthorRepositoryJdbcTest {
     private static final int EXPECTED_AUTHORS_COUNT = 2;

@@ -24,10 +24,10 @@ public class BookReposiryJdbc implements BookReposiry {
     private final JdbcOperations jdbcOp;
     private final NamedParameterJdbcOperations jdbc;
 
-    public BookReposiryJdbc(NamedParameterJdbcOperations jdbcOperations,
-                            JdbcOperations jdbcOp) {
+    public BookReposiryJdbc(NamedParameterJdbcOperations jdbcOperations
+                            ) {
         this.jdbc = jdbcOperations;
-        this.jdbcOp = jdbcOp;
+        this.jdbcOp = jdbcOperations.getJdbcOperations();
     }
 
     @Override
@@ -52,17 +52,14 @@ public class BookReposiryJdbc implements BookReposiry {
     public Book getById(long id) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("id", id);
-        List<Book> listBook = jdbc.query(" select b.id, b.name, b.authorid, " +
+        return jdbc.queryForObject(" select b.id, b.name, b.authorid, " +
                 "a.firstname, a.secondname, a.lastname, a.birthdate, " +
                 "b.genreid, j.name as genrename " +
                 "from books b " +
                 "inner join authors a on a.id = b.authorid " +
                 "inner join genres j on j.id = b.genreid " +
-                "where b.id = :id ",  params, new BookMapper());
-        if (listBook.isEmpty())
-            return null;
-        else
-            return listBook.get(0);
+                "where b.id = :id ", params, new BookMapper());
+
     }
 
     @Override
@@ -73,26 +70,29 @@ public class BookReposiryJdbc implements BookReposiry {
 
     @Override
     public List<Book> findAllWithAllInfo() {
-        Map<Long, Book> books = jdbc.query(" select b.id, b.name, b.authorid, " +
+        SqlParameterSource params = new EmptySqlParameterSource();
+        List<Book> listBook = jdbc.query(" select b.id, b.name, b.authorid, " +
                 "a.firstname, a.secondname, a.lastname, a.birthdate, " +
                 "b.genreid, j.name as genrename " +
                 "from books b " +
                 "inner join authors a on a.id = b.authorid " +
-                "inner join genres j on j.id = b.genreid", new BookresultSetExtractor());
+                "inner join genres j on j.id = b.genreid", params, new BookMapper());
 
-        return new ArrayList<>(Objects.requireNonNull(books).values());
+        return listBook;
 
     }
 
     @Override
     public List<Book> findAllByAuthorID(Long id) {
-        Map<Long, Book> books = jdbcOp.query(" select b.id, b.name, b.authorid, " +
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", id);
+        Map<Long, Book> books = jdbc.query(" select b.id, b.name, b.authorid, " +
                 "a.firstname, a.secondname, a.lastname, a.birthdate, " +
                 "b.genreid, j.name as genrename " +
                 "from authors a " +
                 "inner join books b on  b.authorid = a.id " +
                 "inner join genres j on j.id = b.genreid " +
-                "where a.id = ? ", new BookresultSetExtractor(), id);
+                "where a.id = :id ", params,new BookresultSetExtractor());
 
         return new ArrayList<>(Objects.requireNonNull(books).values());
     }

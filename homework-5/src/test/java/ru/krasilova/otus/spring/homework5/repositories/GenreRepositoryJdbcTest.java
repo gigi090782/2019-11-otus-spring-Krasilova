@@ -6,20 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
-import ru.krasilova.otus.spring.homework5.models.Author;
 import ru.krasilova.otus.spring.homework5.models.Genre;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Repository для работы с жанрами должно")
 @JdbcTest
 @Import(GenreRepositoryJdbc.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+
 class GenreRepositoryJdbcTest {
 
     private static final int EXPECTED_GENRES_COUNT = 3;
