@@ -1,18 +1,17 @@
 package ru.krasilova.otus.spring.homework5.repositories;
 
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.EmptySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.krasilova.otus.spring.homework5.models.Author;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -22,17 +21,19 @@ import java.util.List;
 @SuppressWarnings({"SqlNoDataSourceInspection", "ConstantConditions", "SqlDialectInspection"})
 @Repository
 public class AuthorRepositoryJdbc implements AuthorRepository, Serializable {
-    private final JdbcOperations jdbc;
-    private final NamedParameterJdbcOperations jdbcNamed;
 
-    public AuthorRepositoryJdbc(JdbcOperations jdbcOperations,  NamedParameterJdbcOperations jdbcNamed) {
-        this.jdbc = jdbcOperations;
-        this.jdbcNamed = jdbcNamed;
+    private final NamedParameterJdbcOperations jdbc;
+
+    public AuthorRepositoryJdbc(JdbcOperations jdbcOperations, NamedParameterJdbcOperations jdbc) {
+        this.jdbc = jdbc;
     }
 
     @Override
     public int count() {
-        return jdbc.queryForObject("select count(*) from authors", Integer.class);
+
+
+        SqlParameterSource paramSource = new EmptySqlParameterSource();
+        return jdbc.queryForObject("select count(*) from authors", paramSource, Integer.class);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class AuthorRepositoryJdbc implements AuthorRepository, Serializable {
         params.addValue("lastName", lastName);
         params.addValue("birthdate", birthdate);
         KeyHolder kh = new GeneratedKeyHolder();
-        jdbcNamed.update("insert into authors (`firstName`,`secondName`,`lastName`,`birthdate`) values (:firstName, :secondName, :lastName, :birthdate)", params, kh);
+        jdbc.update("insert into authors (`firstName`,`secondName`,`lastName`,`birthdate`) values (:firstName, :secondName, :lastName, :birthdate)", params, kh);
         return kh.getKey().longValue();
 
     }
@@ -51,11 +52,10 @@ public class AuthorRepositoryJdbc implements AuthorRepository, Serializable {
 
     @Override
     public Author getById(long id) {
-         List<Author> listAuthor = jdbc.query("select * from authors where id = ?", new AuthorMapper(), id);
-        if (listAuthor.isEmpty())
-            return null;
-        else
-            return listAuthor.get(0);
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", id);
+        return jdbc.queryForObject(" select * from authors where id = :id ", params, new AuthorMapper());
     }
 
     @Override

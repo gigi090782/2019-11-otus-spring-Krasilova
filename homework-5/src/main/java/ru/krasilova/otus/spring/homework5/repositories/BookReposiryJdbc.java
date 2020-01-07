@@ -1,6 +1,5 @@
 package ru.krasilova.otus.spring.homework5.repositories;
 
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.EmptySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -10,24 +9,22 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.krasilova.otus.spring.homework5.models.Author;
-import ru.krasilova.otus.spring.homework5.models.Genre;
-import ru.krasilova.otus.spring.homework5.repositories.extractors.BookresultSetExtractor;
 import ru.krasilova.otus.spring.homework5.models.Book;
+import ru.krasilova.otus.spring.homework5.models.Genre;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings({"SqlNoDataSourceInspection", "ConstantConditions", "SqlDialectInspection"})
 @Repository
 public class BookReposiryJdbc implements BookReposiry {
-    private final JdbcOperations jdbcOp;
     private final NamedParameterJdbcOperations jdbc;
 
     public BookReposiryJdbc(NamedParameterJdbcOperations jdbcOperations
-                            ) {
+    ) {
         this.jdbc = jdbcOperations;
-        this.jdbcOp = jdbcOperations.getJdbcOperations();
     }
 
     @Override
@@ -86,41 +83,45 @@ public class BookReposiryJdbc implements BookReposiry {
     public List<Book> findAllByAuthorID(Long id) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("id", id);
-        Map<Long, Book> books = jdbc.query(" select b.id, b.name, b.authorid, " +
+        List<Book> listBook = jdbc.query(" select b.id, b.name, b.authorid, " +
                 "a.firstname, a.secondname, a.lastname, a.birthdate, " +
                 "b.genreid, j.name as genrename " +
                 "from authors a " +
                 "inner join books b on  b.authorid = a.id " +
                 "inner join genres j on j.id = b.genreid " +
-                "where a.id = :id ", params,new BookresultSetExtractor());
+                "where a.id = :id ", params, new BookMapper());
 
-        return new ArrayList<>(Objects.requireNonNull(books).values());
+        return listBook;
     }
 
     @Override
     public List<Book> findAllByAuthorLastName(String lastName) {
-        Map<Long, Book> books = jdbcOp.query(" select b.id, b.name, b.authorid, " +
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("lastName", lastName);
+        List<Book> listBook = jdbc.query(" select b.id, b.name, b.authorid, " +
                 "a.firstname, a.secondname, a.lastname, a.birthdate, " +
                 "b.genreid, j.name as genrename " +
                 "from authors a " +
                 "inner join books b on  b.authorid = a.id " +
                 "inner join genres j on j.id = b.genreid " +
-                "where a.lastname = ? ", new BookresultSetExtractor(), lastName);
+                "where a.lastname = :lastName ", params, new BookMapper());
 
-        return new ArrayList<>(Objects.requireNonNull(books).values());
+        return listBook;
     }
 
     @Override
-    public List<Book> findAllByGenreName(String jereName) {
-        Map<Long, Book> books = jdbcOp.query(" select b.id, b.name, b.authorid, " +
+    public List<Book> findAllByGenreName(String jenreName) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("jenreName", jenreName);
+        List<Book> listBook = jdbc.query(" select b.id, b.name, b.authorid, " +
                 "a.firstname, a.secondname, a.lastname, a.birthdate, " +
                 "b.genreid, j.name as genrename " +
                 "from genres j  " +
                 "inner join books b on  b.genreid  = j.id " +
                 "inner join authors a on a.id = b.authorid  " +
-                "where j.name = ? ", new BookresultSetExtractor(), jereName);
+                "where j.name = :jenreName ", params, new BookMapper());
 
-        return new ArrayList<>(Objects.requireNonNull(books).values());
+        return listBook;
     }
 
     public static class BookMapper implements RowMapper<Book> {

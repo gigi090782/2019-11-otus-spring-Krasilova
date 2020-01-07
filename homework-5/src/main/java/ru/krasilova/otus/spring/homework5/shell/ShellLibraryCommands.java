@@ -102,7 +102,7 @@ public class ShellLibraryCommands {
     @ShellMethod(value = "add new book", key = {"ab", "addbook"})
     public void addBook(@ShellOption(defaultValue = "Новая книга") String bookName,
                         @ShellOption(defaultValue = "1") Long authorId,
-                        @ShellOption(defaultValue = "5") Long genreId) {
+                        @ShellOption(defaultValue = "1") Long genreId) {
         try {
             boolean result = libraryService.addNewBook(bookName, authorId, genreId);
             if (result)
