@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 
+import ru.krasilova.otus.spring.homework6.models.Book;
 import ru.krasilova.otus.spring.homework6.models.Comment;
 
 
@@ -54,8 +55,8 @@ class CommentRepositoryImplTest {
     @DisplayName(" должен корректно сохранять комментарий")
     @Test
     void shouldSaveAllAuthorInfo()  {
-
-        Comment comment = new Comment(0, NEW_COMMENT_TEXT,FIRST_BOOK_ID);
+        Book book =  em.find(Book.class, FIRST_BOOK_ID);
+        Comment comment = new Comment(0, NEW_COMMENT_TEXT,book);
         repositoryComment.save(comment);
         assertThat(comment.getId()).isGreaterThan(0);
 

@@ -17,6 +17,8 @@ public class Comment {
     @Column(name = "text", nullable = false, unique = false)
     private String text;
 
-    @Column(name = "book_id", nullable = false, unique = false)
-    private Long book_id;
+    @ManyToOne(targetEntity = Book.class,   cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id")
+    private Book book;
+
 }

@@ -32,11 +32,9 @@ class BookRepositoryImplTest {
     private static final long FIRST_BOOK_ID = 1L;
     private static final long FIRST_AUTHOR_ID = 1L;
     private static final long FIRST_GENRE_ID = 1L;
-    private static final int EXPECTED_QUERIES_COUNT = 3;
-    private static final int NEW_BOOK_ID = 3;
+    private static final int EXPECTED_QUERIES_COUNT = 1;
     private static final String NEW_BOOK_NAME = "Новая книга";
     private static final String FIRST_BOOK_NAME = "Загадочное происшествие в Стайлзе";
-    private static final int DEFAULT_BOOK_ID = 1;
     private static final String NEW_COMMENT = "Замечательная книга";
 
 
@@ -71,8 +69,7 @@ class BookRepositoryImplTest {
         System.out.println("\n\n\n\n----------------------------------------------------------------------------------------------------------");
         List<Book> books = repositoryBook.findAllWithAllInfo();
         assertThat(books).isNotNull().hasSize(EXPECTED_NUMBER_OF_BOOKS)
-                .allMatch(s -> !s.getName().equals(""))
-                .allMatch(s -> s.getComments() != null && s.getComments().size() > 0);
+                .allMatch(s -> !s.getName().equals(""));
         System.out.println("----------------------------------------------------------------------------------------------------------\n\n\n\n");
         assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(EXPECTED_QUERIES_COUNT);
     }
@@ -82,17 +79,16 @@ class BookRepositoryImplTest {
     void shouldSaveAllBookInfo() {
         Author author = repositoryAuthor.findById(FIRST_AUTHOR_ID);
         Genre genre = repositoryGenre.findById(FIRST_GENRE_ID);
-        Book newbook = new Book (0,NEW_BOOK_NAME,author, genre, null);
+        Book newbook = new Book (0,NEW_BOOK_NAME,author, genre);
         repositoryBook.save(newbook);
         assertThat(newbook.getId()).isGreaterThan(0);
-        Comment newcomment  = new Comment(0,NEW_COMMENT,newbook.getId());
+        Comment newcomment  = new Comment(0,NEW_COMMENT,newbook);
         repositoryComment.save(newcomment);
         em.detach(newbook);
         val actualBook = em.find(Book.class, newbook.getId());
         assertThat(actualBook).isNotNull().matches(s -> !s.getName().equals(""))
                 .matches(s -> s.getAuthor() != null)
-                .matches(s -> s.getGenre() != null)
-               .matches(s -> s.getComments() != null && s.getComments().size() > 0);
+                .matches(s -> s.getGenre() != null);
     }
     @DisplayName(" должен загружать информацию о нужной книге по ее имени")
     @Test

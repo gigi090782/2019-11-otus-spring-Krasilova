@@ -22,13 +22,13 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public void addNewGenre(String genreName) {
-        Genre genre = new Genre(0, genreName);
+        Genre genre = new Genre(0, genreName,null);
         genreRepository.save(genre);
     }
 
     @Override
     public void addNewAuthor(String firstName, String secondName, String lastName, Date birthdate) {
-        Author author = new Author(0, firstName, secondName, lastName, birthdate);
+        Author author = new Author(0, firstName, secondName, lastName, birthdate,null);
         authorRepository.save(author);
     }
 
@@ -45,7 +45,7 @@ public class LibraryServiceImpl implements LibraryService {
             ioService.printString("Данный жанр не заведен в библиотеке!");
             return false;
         }
-        Book book = new Book(0, bookName, author, genre, null);
+        Book book = new Book(0, bookName, author, genre);
         bookRepository.save(book);
         return true;
     }
@@ -58,7 +58,7 @@ public class LibraryServiceImpl implements LibraryService {
             return false;
         }
 
-        Comment comment = new Comment(0, text, bookId);
+        Comment comment = new Comment(0, text, book);
         commentRepository.save(comment);
         return true;
     }

@@ -69,7 +69,7 @@ class AuthorRepositoryImplTest {
         SimpleDateFormat format = new SimpleDateFormat();
         format.applyPattern("dd.MM.yyyy");
         Date birthdate = format.parse("01.01.1990");
-        Author author = new Author(0, AUTHOR_FIRSTNAME,AUTHOR_SECONDTNAME, AUTHOR_LASTTNAME, birthdate);
+        Author author = new Author(0, AUTHOR_FIRSTNAME,AUTHOR_SECONDTNAME, AUTHOR_LASTTNAME, birthdate,null);
         repositoryAuthor.save(author);
         assertThat(author.getId()).isGreaterThan(0);
 

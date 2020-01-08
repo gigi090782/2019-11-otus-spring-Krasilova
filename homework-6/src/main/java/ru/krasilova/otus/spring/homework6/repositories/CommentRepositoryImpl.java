@@ -42,8 +42,8 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public List<Comment> findByBookId(Long id) {
         TypedQuery<Comment> query = em.createQuery("select c " +
-                        "from Comment c " +
-                        "where c.book_id = :id",
+                        "from Comment c inner join fetch c.book b " +
+                        "where b.id = :id",
                 Comment.class);
         query.setParameter("id", id);
         return query.getResultList();
@@ -52,8 +52,8 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public List<Comment> findByBookName(String name) {
         TypedQuery<Comment> query = em.createQuery("select c " +
-                        "from  Book b" +
-                        "  join Comment c on c.book_id = b.id " +
+                        "from  Comment c " +
+                        " inner join fetch c.book b " +
                         "where b.name = :name",
                 Comment.class);
         query.setParameter("name", name);
@@ -63,7 +63,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public List<Comment> getAll() {
         TypedQuery<Comment> query =
-                em.createQuery("select c from Comment c", Comment.class);
+                em.createQuery("select c from Comment c ", Comment.class);
         return query.getResultList();
     }
 

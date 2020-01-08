@@ -12,23 +12,21 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "books")
-@NamedEntityGraph(name = "book-comments-entity-graph",
-        attributeNodes = {@NamedAttributeNode("comments")})
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "name", nullable = false, unique = false)
     private String name;
-    @OneToOne(targetEntity = Author.class, cascade = CascadeType.MERGE)
+    @ManyToOne (targetEntity = Author.class, cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private Author author;
-    @OneToOne(targetEntity = Genre.class, cascade = CascadeType.MERGE)
+    @ManyToOne(targetEntity = Genre.class, cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
-    @OneToMany(targetEntity = Comment.class, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinColumn(name = "book_id")
-    private List<Comment> comments;
+//    @OneToMany(targetEntity = Comment.class, cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "book_id")
+//    private List<Comment> comments;
 
 }

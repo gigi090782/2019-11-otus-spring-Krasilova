@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -26,6 +27,9 @@ public class Author {
     private String lastName;
     @Column(name = "birthdate", nullable = false, unique = false)
     private Date birthDate;
+    @OneToMany(targetEntity = Book.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id")
+    private List<Book> books;
 
 }
 

@@ -58,7 +58,7 @@ class GenreRepositoryImplTest {
     @Test
     void shouldSaveAllAuthorInfo()  {
 
-        Genre genre = new Genre(0, NEW_GENRE_NAME);
+        Genre genre = new Genre(0, NEW_GENRE_NAME, null);
         repositoryGenre.save(genre);
         assertThat(genre.getId()).isGreaterThan(0);
 

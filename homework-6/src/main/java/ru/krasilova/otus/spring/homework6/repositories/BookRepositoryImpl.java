@@ -26,7 +26,9 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public List<Book> findByName(String name) {
         TypedQuery<Book> query = em.createQuery("select b " +
-                        "from Book b  join fetch b.comments " +
+                        "from Book b  " +
+                        "join fetch b.author " +
+                        "join fetch b.genre " +
                         "where b.name = :name",
                 Book.class);
         query.setParameter("name", name);
@@ -35,11 +37,11 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> findAllWithAllInfo() {
-        EntityGraph<?> entityGraph = em.getEntityGraph("book-comments-entity-graph");
         TypedQuery<Book> query = em.createQuery("select b " +
-                        "from Book b  join fetch b.author",
+                        "from Book b  " +
+                        "join fetch b.author " +
+                        "join fetch b.genre ",
                 Book.class);
-        query.setHint("javax.persistence.fetchgraph", entityGraph);
         return query.getResultList();
     }
 
@@ -69,7 +71,6 @@ public class BookRepositoryImpl implements BookRepository {
         TypedQuery<Book> query = em.createQuery("select b " +
                         "from Book b " +
                         " inner join Author a on a.id = b.author_id " +
-                        " join fetch b.comments " +
                         "where a.lastName = :lastName",
                 Book.class);
         query.setParameter("lastName", lastName);
