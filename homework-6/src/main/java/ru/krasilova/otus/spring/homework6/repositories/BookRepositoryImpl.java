@@ -58,9 +58,10 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public List<Book> findAllByAuthorID(Long id) {
         TypedQuery<Book> query = em.createQuery("select b " +
-                        "from Book b" +
-                        " join fetch b.comments " +
-                        "where b.author_id = :id",
+                        "from Book b " +
+                        " join fetch b.genre " +
+                        " join fetch b.author a " +
+                        " where a.id = :id",
                 Book.class);
         query.setParameter("id", id);
         return query.getResultList();
@@ -70,8 +71,9 @@ public class BookRepositoryImpl implements BookRepository {
     public List<Book> findAllByAuthorLastName(String lastName) {
         TypedQuery<Book> query = em.createQuery("select b " +
                         "from Book b " +
-                        " inner join Author a on a.id = b.author_id " +
-                        "where a.lastName = :lastName",
+                        " join fetch b.genre " +
+                        " join fetch  b.author a" +
+                        " where a.lastName = :lastName",
                 Book.class);
         query.setParameter("lastName", lastName);
         return query.getResultList();
@@ -80,10 +82,9 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public List<Book> findAllByGenreName(String genreName) {
         TypedQuery<Book> query = em.createQuery("select b " +
-                        "from Book b " +
-                        " inner join Genre g on g.id = b.genre_id " +
-                        " join fetch b.comments " +
-                        "where g.Name = :genreName",
+                        "from Book b join fetch b.author" +
+                        " join fetch b.genre g  " +
+                        "where g.name = :genreName",
                 Book.class);
         query.setParameter("genreName", genreName);
         return query.getResultList();

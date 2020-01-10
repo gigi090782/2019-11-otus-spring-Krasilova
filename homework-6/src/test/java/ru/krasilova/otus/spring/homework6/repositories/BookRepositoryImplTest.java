@@ -77,14 +77,10 @@ class BookRepositoryImplTest {
     @DisplayName(" должен корректно сохранять информацию о книге")
     @Test
     void shouldSaveAllBookInfo() {
-        Author author = repositoryAuthor.findById(FIRST_AUTHOR_ID);
-        Genre genre = repositoryGenre.findById(FIRST_GENRE_ID);
-        Book newbook = new Book (0,NEW_BOOK_NAME,author, genre);
-        repositoryBook.save(newbook);
-        assertThat(newbook.getId()).isGreaterThan(0);
-        Comment newcomment  = new Comment(0,NEW_COMMENT,newbook);
-        repositoryComment.save(newcomment);
-        em.detach(newbook);
+        val author = em.find(Author.class, FIRST_AUTHOR_ID);
+        val genre = em.find(Genre.class, FIRST_GENRE_ID);
+        val newbook = new Book (0,NEW_BOOK_NAME,author, genre);
+        em.persist(newbook);
         val actualBook = em.find(Book.class, newbook.getId());
         assertThat(actualBook).isNotNull().matches(s -> !s.getName().equals(""))
                 .matches(s -> s.getAuthor() != null)
