@@ -42,12 +42,6 @@ class BookRepositoryImplTest {
     @Autowired
     private BookRepositoryImpl repositoryBook;
     @Autowired
-    private AuthorRepositoryImpl repositoryAuthor;
-    @Autowired
-    private CommentRepositoryImpl repositoryComment;
-    @Autowired
-    private GenreRepositoryImpl repositoryGenre;
-    @Autowired
     private TestEntityManager em;
 
     @DisplayName(" должен загружать информацию о нужной книге по ее id")
