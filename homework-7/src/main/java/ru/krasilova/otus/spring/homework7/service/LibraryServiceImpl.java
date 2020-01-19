@@ -2,6 +2,8 @@ package ru.krasilova.otus.spring.homework7.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.krasilova.otus.spring.homework7.exceptions.AuthorNotFoundException;
+import ru.krasilova.otus.spring.homework7.exceptions.GenreNotFoundException;
 import ru.krasilova.otus.spring.homework7.models.*;
 import ru.krasilova.otus.spring.homework7.repositories.AuthorRepository;
 import ru.krasilova.otus.spring.homework7.repositories.BookRepository;
@@ -35,27 +37,12 @@ public class LibraryServiceImpl implements LibraryService {
         authorRepository.save(author);
     }
     @Override
-    public boolean addNewBook(String bookName, Long authorId, Long genreId) {
-        Optional<Author> optionalAuthor = authorRepository.findById(authorId);
-        Author author;
-        if (optionalAuthor.isPresent() == true) {
-            author = optionalAuthor.get();
-        } else {
-            ioService.printString("Данный автор не заведен в библиотеке!");
-            return false;
-        }
-        Optional<Genre> optionalGenre = genreRepository.findById(genreId);
-        Genre genre;
 
-        if (optionalGenre.isPresent() == true)
-        {
-            genre = optionalGenre.get();
-        }
-        else
-        {
-            ioService.printString("Данный жанр не заведен в библиотеке!");
-            return false;
-        }
+    public boolean addNewBook(String bookName, Long authorId, Long genreId)  throws Exception {
+        Optional<Author> optionalAuthor = authorRepository.findById(authorId);
+        Author author = optionalAuthor.orElseThrow(() -> new AuthorNotFoundException("Данный автор не заведен в библиотеке!"));
+        Optional<Genre> optionalGenre = genreRepository.findById(genreId);
+        Genre genre = optionalGenre.orElseThrow(() -> new GenreNotFoundException("Данный жанр не заведен в библиотеке!"));
         Book book = new Book (0,bookName, author, genre );
         bookRepository.save(book);
         return true;

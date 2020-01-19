@@ -7,7 +7,7 @@ public interface LibraryService {
 
     void addNewAuthor(String firstName, String secondName, String lastName, Date birthdate);
 
-    boolean addNewBook(String bookName, Long authorId, Long genreId);
+    boolean addNewBook(String bookName, Long authorId, Long genreId) throws Exception;
 
     boolean addNewComment(String text, Long bookId);
 

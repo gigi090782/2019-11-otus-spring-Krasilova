@@ -19,9 +19,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Repository для работы с жанрами должно")
-@RunWith(SpringRunner.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Transactional
 class GenreRepositoryTest {
 

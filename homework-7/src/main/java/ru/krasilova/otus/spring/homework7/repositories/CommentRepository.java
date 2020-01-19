@@ -9,12 +9,6 @@ import java.util.List;
 
 public interface CommentRepository  extends JpaRepository<Comment, Long>
 {
-    @Query("select count(c) from Comment c")
-    long count();
-
-    Comment findById(long id);
     List<Comment> findByBookId(Long id);
-    List<Comment> findByBookName(String name);
     List<Comment> findAll();
-    void deleteById(long id);
 }

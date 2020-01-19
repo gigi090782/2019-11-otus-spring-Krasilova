@@ -9,10 +9,8 @@ import java.util.List;
 
 public interface GenreRepository extends JpaRepository<Genre, Long>
 {
-    @Query("select count(g) from Genre g")
-    long count();
     Genre findById(long id);
     List<Genre> findAll();
     Genre findByName(String name);
-    void deleteById(long id);
+
 }

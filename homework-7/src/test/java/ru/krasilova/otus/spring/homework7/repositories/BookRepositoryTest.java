@@ -25,20 +25,18 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Repository для работы с книгами должно")
-@RunWith(SpringRunner.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Transactional
 class BookRepositoryTest {
 
 
     private static final String NEW_BOOK_NAME = "Новая книга";
-    private static final String BOOK_NAME = "Загадочное происшествие в Стайлзе";
+    private static final String BOOK_NAME = "Загадочное происшествие в Стайлзе_1";
     private static final String NEW_AUTHOR_FIRSTNAME = "ИМЯ";
     private static final String NEW_AUTHOR_SECONDNAME = "ОТЧЕСТВО";
     private static final String NEW_AUTHOR_LASTNAME = "ФАМИЛИЯ";
     private static final String NEW_GENRE_NAME = "Фентези";
-    private static final String NEW_GENRE_DETECTIVE = "Детектив";
+    private static final String NEW_GENRE_DETECTIVE = "DETECTIVE";
 
 
     @Autowired
@@ -59,14 +57,8 @@ class BookRepositoryTest {
         Author author = new Author(0, NEW_AUTHOR_FIRSTNAME,NEW_AUTHOR_SECONDNAME, NEW_AUTHOR_LASTNAME, date,null);
         Book book = new Book(0, NEW_BOOK_NAME, author, genre);
         em.persist(book);
-        Book actual = repository.findById(1);
-        assertThat(actual.getName()).isEqualTo(book.getName());
-        assertThat(actual.getGenre().getName()).isEqualTo(book.getGenre().getName());
-        assertThat(actual.getAuthor().getFirstName()).isEqualTo(book.getAuthor().getFirstName());
-        assertThat(actual.getAuthor().getSecondName()).isEqualTo(book.getAuthor().getSecondName());
-        assertThat(actual.getAuthor().getLastName()).isEqualTo(book.getAuthor().getLastName());
-        assertThat(actual.getAuthor().getBirthDate()).isEqualTo(book.getAuthor().getBirthDate());
-
+        List<Book> actualListBook  = repository.findAllByAuthorLastName(NEW_AUTHOR_LASTNAME);
+        actualListBook.forEach(a ->assertThat(a.getAuthor().getLastName()).isEqualTo(NEW_AUTHOR_LASTNAME));
     }
 
     @DisplayName("возвращать книги по жанру")

@@ -22,9 +22,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Repository для работы с авторами должно")
-@RunWith(SpringRunner.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Transactional
 class AuthorRepositoryTest {
     private static final String NEW_AUTHOR_FIRSTNAME = "ИМЯ";
