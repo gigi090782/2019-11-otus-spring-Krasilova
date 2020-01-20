@@ -14,11 +14,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Book findById(long id);
     @EntityGraph(value = "allJoin", type = EntityGraph.EntityGraphType.FETCH)
     List<Book> findAll();
-
+    @EntityGraph(value = "allJoin", type = EntityGraph.EntityGraphType.FETCH)
     List<Book> findAllByAuthorId(Long id);
-
+    @EntityGraph(value = "allJoin", type = EntityGraph.EntityGraphType.FETCH)
     List<Book> findAllByAuthorLastName(String lastName);
-
+    @EntityGraph(value = "allJoin", type = EntityGraph.EntityGraphType.FETCH)
     List<Book> findAllByGenreName(String genreName);
 
 }
