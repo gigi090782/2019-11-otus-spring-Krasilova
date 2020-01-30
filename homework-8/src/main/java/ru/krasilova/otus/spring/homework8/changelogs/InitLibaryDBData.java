@@ -45,10 +45,16 @@ public class InitLibaryDBData {
     @ChangeSet(order = "002", id = "initAuthors", author = "gigi", runAlways = true)
     public void initSAuthors(MongoTemplate template) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
-        Date date = new SimpleDateFormat("dd.MM.yyyy").parse("15.09.1890");
+        Date date = new SimpleDateFormat("dd.MM.yyyy").parse("28.05.1967");
+        template.save(new Author("Андрей", "Валентинович", "Жвалевский", date));
+        date = new SimpleDateFormat("dd.MM.yyyy").parse("15.09.1890");
         authorCristy = template.save(new Author("Агата", "Мэри Кларисса", "Кристи", date));
         date = new SimpleDateFormat("dd.MM.yyyy").parse("09.09.1817");
         authorTolstoy = template.save(new Author("Лев", "Николаевич", "Толстой", date));
+
+
+
+
     }
 
     @ChangeSet(order = "003", id = "initBooks", author = "gigi", runAlways = true)

@@ -20,7 +20,6 @@ import java.util.List;
 @Document(collection = "authors")
 public class Author {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     @Field(name = "firstname")
     private String firstName;

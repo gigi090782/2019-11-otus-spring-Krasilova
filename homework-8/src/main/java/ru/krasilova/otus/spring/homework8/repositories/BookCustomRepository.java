@@ -9,4 +9,5 @@ public interface BookCustomRepository {
     void removeBooksByAuthorId(String id);
     void removeBooksByGenreId(String id);
     void removeCommentsByBooksId(String id);
+
 }

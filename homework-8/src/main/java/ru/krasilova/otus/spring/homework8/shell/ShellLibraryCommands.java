@@ -164,13 +164,28 @@ public class ShellLibraryCommands {
     @ShellMethod(value = "delete author", key = {"da", "deleteauthor"})
     public void deleteAuthor( @ShellOption(defaultValue = "") String authorId,
                               @ShellOption(defaultValue = "1") int isDeleteFirst
-                              ) {
+    ) {
         try {
             boolean result = libraryService.deleteAuthor(authorId,isDeleteFirst);
             if (result)
                 libraryService.showAllAuthors();
         } catch (Exception e) {
             ioService.printString("Ошибка при удалении автора: " + e.getMessage());
+        }
+    }
+
+
+    @SneakyThrows
+    @ShellMethod(value = "delete book", key = {"db", "deletebook"})
+    public void deleteBook( @ShellOption(defaultValue = "") String bookId,
+                              @ShellOption(defaultValue = "1") int isDeleteFirst
+    ) {
+        try {
+            boolean result = libraryService.deleteBook(bookId,isDeleteFirst);
+            if (result)
+                libraryService.showAllBooks();
+        } catch (Exception e) {
+            ioService.printString("Ошибка при удалении книги: " + e.getMessage());
         }
     }
 

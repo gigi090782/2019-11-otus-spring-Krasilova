@@ -16,7 +16,6 @@ import java.util.List;
 @Document(collection = "genres")
 public class Genre {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     @Field(name = "name")
     private String name;

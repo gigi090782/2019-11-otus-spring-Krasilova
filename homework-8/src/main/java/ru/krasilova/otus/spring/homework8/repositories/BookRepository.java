@@ -9,13 +9,9 @@ import java.util.List;
 
 public interface BookRepository extends MongoRepository<Book, String>,BookCustomRepository {
 
-    @EntityGraph(value = "allJoin", type = EntityGraph.EntityGraphType.FETCH)
     List<Book> findAll();
-    @EntityGraph(value = "allJoin", type = EntityGraph.EntityGraphType.FETCH)
     List<Book> findAllByAuthorId(String id);
-    @EntityGraph(value = "allJoin", type = EntityGraph.EntityGraphType.FETCH)
     List<Book> findAllByAuthorLastName(String lastName);
-    @EntityGraph(value = "allJoin", type = EntityGraph.EntityGraphType.FETCH)
     List<Book> findAllByGenreName(String genreName);
 
 }

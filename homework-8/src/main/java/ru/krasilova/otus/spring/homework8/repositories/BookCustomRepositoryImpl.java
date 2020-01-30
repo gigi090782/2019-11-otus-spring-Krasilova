@@ -37,6 +37,9 @@ public class BookCustomRepositoryImpl implements BookCustomRepository {
         mongoTemplate.remove(query, Book.class, "books");
     }
 
+
+
+
     @Override
     public void removeCommentsByBooksId(String id) {
         Query queryComment = Query.query(Criteria.where("book_id").is(id));

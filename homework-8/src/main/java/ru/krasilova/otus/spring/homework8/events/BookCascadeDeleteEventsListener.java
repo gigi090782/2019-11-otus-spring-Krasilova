@@ -17,12 +17,10 @@ public class BookCascadeDeleteEventsListener extends AbstractMongoEventListener<
     @Override
     public void onAfterDelete(AfterDeleteEvent<Book> event) {
         super.onAfterDelete(event);
-  /*     val source = event.getSource();
-        if (source.getClass().equals(new Book().getClass()))
-        {   val id = source.get("_id").toString();
-            commentRepository.removeCommentsByBookId(id);
-        }
-*/
+        val source = event.getSource();
+        val id = source.get("_id").toString();
+        commentRepository.removeCommentsByBookId(id);
+
 
     }
 }

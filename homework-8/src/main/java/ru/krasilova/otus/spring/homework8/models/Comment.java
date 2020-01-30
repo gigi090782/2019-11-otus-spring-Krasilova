@@ -14,7 +14,6 @@ import javax.persistence.*;
 @Document(collection =  "comments")
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     @Field(name = "text")
     private String text;

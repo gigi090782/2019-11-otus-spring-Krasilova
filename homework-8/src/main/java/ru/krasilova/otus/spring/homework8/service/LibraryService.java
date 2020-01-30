@@ -1,5 +1,6 @@
 package ru.krasilova.otus.spring.homework8.service;
 
+import ru.krasilova.otus.spring.homework8.exceptions.BookNotFoundException;
 import ru.krasilova.otus.spring.homework8.exceptions.GenreNotFoundException;
 
 import java.util.Date;
@@ -15,9 +16,11 @@ public interface LibraryService {
 
     boolean deleteComment(String commentId);
 
-   boolean deleteAuthor(String authorId, int isDeleteFirst) throws Exception;
+    boolean deleteAuthor(String authorId, int isDeleteFirst) throws Exception;
 
     boolean deleteGenre(String genreId, int isDeleteFirst) throws Exception;
+
+    boolean deleteBook(String bookId, int isDeleteFirst) throws Exception;
 
     void showAllGenres();
 

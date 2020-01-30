@@ -4,6 +4,7 @@ package ru.krasilova.otus.spring.homework8.service;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Service;
+import ru.krasilova.otus.spring.homework8.exceptions.AuthorHasBooksException;
 import ru.krasilova.otus.spring.homework8.exceptions.AuthorNotFoundException;
 import ru.krasilova.otus.spring.homework8.exceptions.BookNotFoundException;
 import ru.krasilova.otus.spring.homework8.exceptions.GenreNotFoundException;
@@ -111,9 +112,13 @@ public class LibraryServiceImpl implements LibraryService {
                 throw new AuthorNotFoundException("Авторы не заведены в библиотеке!");
             }
             author = authors.get(0);
+            authorId = author.getId();
         } else {
             Optional<Author> optionalAuthor = authorRepository.findById(authorId);
             author = optionalAuthor.orElseThrow(() -> new AuthorNotFoundException("Данный автор не заведен в библиотеке!"));
+        }
+        if (!authorRepository.canRemoveAuthor(authorId)) {
+            throw new AuthorHasBooksException("У автора имеются книги! Удаление невозможно!");
         }
         authorRepository.delete(author);
         return true;
@@ -133,6 +138,23 @@ public class LibraryServiceImpl implements LibraryService {
             genre = optionalGenre.orElseThrow(() -> new AuthorNotFoundException("Данный жанр не заведен в библиотеке!"));
         }
         genreRepository.delete(genre);
+        return true;
+    }
+
+    @Override
+    public boolean deleteBook(String bookId, int isDeleteFirst) throws Exception {
+        Book book;
+        if (isDeleteFirst == 1) {
+            val books = bookRepository.findAll();
+            if (books.size() == 0) {
+                throw new BookNotFoundException("Книги не заведены в библиотеке!");
+            }
+            book = books.get(0);
+        } else {
+            Optional<Book> optionalBook = bookRepository.findById(bookId);
+            book = optionalBook.orElseThrow(() -> new BookNotFoundException("Данная книга не заведена в библиотеке!"));
+        }
+        bookRepository.delete(book);
         return true;
     }
 

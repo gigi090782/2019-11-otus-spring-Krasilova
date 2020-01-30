@@ -13,15 +13,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection =  "books")
-@NamedEntityGraphs({
-        @NamedEntityGraph(name = "allJoin", attributeNodes = {
-                @NamedAttributeNode("genre"),
-                @NamedAttributeNode("author")
-        })})
-
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     @Field(name = "name")
     private String name;
