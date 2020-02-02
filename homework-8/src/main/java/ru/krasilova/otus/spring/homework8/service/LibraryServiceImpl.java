@@ -117,7 +117,8 @@ public class LibraryServiceImpl implements LibraryService {
             Optional<Author> optionalAuthor = authorRepository.findById(authorId);
             author = optionalAuthor.orElseThrow(() -> new AuthorNotFoundException("Данный автор не заведен в библиотеке!"));
         }
-        if (!authorRepository.canRemoveAuthor(authorId)) {
+
+        if (bookRepository.existsByAuthorId(authorId)) {
             throw new AuthorHasBooksException("У автора имеются книги! Удаление невозможно!");
         }
         authorRepository.delete(author);

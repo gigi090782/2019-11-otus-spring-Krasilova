@@ -46,5 +46,16 @@ public class BookCustomRepositoryImpl implements BookCustomRepository {
         mongoTemplate.remove(queryComment, Comment.class, "comments");
     }
 
+    @Override
+    public boolean existsByAuthorId(String authorId) {
+        Query query = Query.query(Criteria.where("author_id").is(authorId));
+        List<Book> listBook = mongoTemplate.find(query, Book.class);
+        if (listBook.size()!=0)
+             return  true;
+        return false;
+    }
+
+
+
 
 }
