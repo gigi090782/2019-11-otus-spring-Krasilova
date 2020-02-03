@@ -14,14 +14,13 @@ import ru.krasilova.otus.spring.homework8.repositories.BookRepository;
 import ru.krasilova.otus.spring.homework8.repositories.CommentRepository;
 import ru.krasilova.otus.spring.homework8.repositories.GenreRepository;
 
-import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+
 public class LibraryServiceImpl implements LibraryService {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;

@@ -1,6 +1,6 @@
 package ru.krasilova.otus.spring.homework8.repositories;
 
-import org.springframework.data.jpa.repository.EntityGraph;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.krasilova.otus.spring.homework8.models.Book;
 
@@ -13,5 +13,6 @@ public interface BookRepository extends MongoRepository<Book, String>,BookCustom
     List<Book> findAllByAuthorId(String id);
     List<Book> findAllByAuthorLastName(String lastName);
     List<Book> findAllByGenreName(String genreName);
+    boolean existsByAuthorId(String authorId);
 
 }
