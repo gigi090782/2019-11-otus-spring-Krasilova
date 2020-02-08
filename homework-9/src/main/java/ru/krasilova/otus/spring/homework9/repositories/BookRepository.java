@@ -17,7 +17,7 @@ public interface BookRepository extends CrudRepository<Book, Long> {
     List<Book> findAllByAuthorLastName(String lastName);
     @EntityGraph(value = "allJoin", type = EntityGraph.EntityGraphType.FETCH)
     List<Book> findAllByGenreName(String genreName);
-
-
+    boolean existsByAuthorId(long authorId);
+    boolean existsByGenreId(long genreId);
 
 }

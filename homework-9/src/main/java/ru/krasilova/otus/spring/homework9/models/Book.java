@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
+
 @AllArgsConstructor
 @Entity
 @Table(name = "books")
@@ -31,12 +31,34 @@ public class Book {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
+    public Book(){};
+    public Book(String name, Author author, Genre genre) {
+        this.name = name;
+        this.genre = genre;
+        this.author = author;
+    }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
+
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+
     public String getName() {
         return name;
     }
+
+    public long getId() {
+        return id;
+    }
+
+
 }

@@ -1,41 +1,46 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)https://colorlib.com/etc/404/colorlib-error-404-4/ -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html   xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+table td{
+vertical-align:top;
+border:solid 1px #888;
+padding:10px;
+}
 
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>404 HTML Template by Colorlib</title>
-
-<link href="./error_files/css" rel="stylesheet">
-
-<link type="text/css" rel="stylesheet" href="./error_files/style.css">
-
-
-<!--[if lt IE 9]>
-		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
+    </style>
 </head>
 <body>
-<div id="notfound">
-<div class="notfound">
-<div class="notfound-404">
-<h1>Oops!</h1>
-<h2>404 - The Page can't be found</h2>
+<h1>Ошибка:</h1>
+<table>
+    <tr>
+        <td>Date</td>
+        <td th:text="${timestamp}"/>
+    </tr>
+    <tr>
+        <td>Path</td>
+        <td th:text="${path}"/>
+    </tr>
+    <tr>
+        <td>Error</td>
+        <td th:text="${error}"/>
+    </tr>
+    <tr>
+        <td>Status</td>
+        <td th:text="${status}"/>
+    </tr>
+    <tr>
+        <td>Message</td>
+        <td th:text="${message}"/>
+    </tr>
+
+</table>
+<div class="row">
+    <form id="listBooks" th:action="@{/}" action="listBooks.html">
+        <button type="submit">Вернуться к списку книг</button>
+    </form>
+
 </div>
-<a href="https://colorlib.com/etc/404/colorlib-error-404-4/#">Go TO Homepage</a>
-</div>
-</div>
+</body>
+</html >
 
-<script type="text/javascript" async="" src="./error_files/analytics.js.Без названия"></script><script async="" src="./error_files/js" type="text/javascript"></script>
-<script type="text/javascript">
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-23581568-13');
-</script>
-
-
-</body></html>

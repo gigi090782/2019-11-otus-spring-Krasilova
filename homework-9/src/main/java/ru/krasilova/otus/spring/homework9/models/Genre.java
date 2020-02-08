@@ -1,4 +1,5 @@
 package ru.krasilova.otus.spring.homework9.models;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,4 +21,17 @@ public class Genre {
     @OneToMany(targetEntity = Book.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private List<Book> books;
+
+    public Genre(String name) {
+        this.name = name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName() {
+        return name;
+    }
+    public long getId() {
+        return id;
+    }
 }
