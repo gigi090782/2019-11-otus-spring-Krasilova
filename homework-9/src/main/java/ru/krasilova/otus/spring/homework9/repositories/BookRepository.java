@@ -4,9 +4,10 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
 import ru.krasilova.otus.spring.homework9.models.Book;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
-
+@Transactional
 public interface BookRepository extends CrudRepository<Book, Long> {
     @EntityGraph(value = "allJoin", type = EntityGraph.EntityGraphType.FETCH)
     List<Book> findAll();

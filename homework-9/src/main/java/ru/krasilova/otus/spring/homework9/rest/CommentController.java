@@ -29,7 +29,7 @@ public class CommentController {
     }
 
     @GetMapping("/commentsbook")
-    public String listBook(@RequestParam("id") long id,Model model) {
+    public String getListBook(@RequestParam("id") long id,Model model) {
         List<Comment> comments = repository.findByBookId(id);
         model.addAttribute("comments", comments);
         model.addAttribute("bookid", id);
@@ -37,15 +37,15 @@ public class CommentController {
     }
 
     @GetMapping("/editcomment")
-    public String editComment(@RequestParam("id") long id, Model model) {
+    public String getEditComment(@RequestParam("id") long id, Model model) {
         Comment comment = repository.findById(id).orElseThrow(NotFoundException::new);
         model.addAttribute("comment", comment);
         return "editComment";
     }
 
 
-    @PostMapping("/addcomment")
-    public String addComment(@RequestParam("bookid") long bookId, Model model) throws ParseException {
+    @GetMapping("/addcomment")
+    public String getAddComment(@RequestParam("bookid") long bookId, Model model) throws ParseException {
         Book book = bookRepository.findById(bookId).orElseThrow(NotFoundException::new);
         Comment comment = new Comment("", book);
         model.addAttribute("comment", comment);
@@ -53,7 +53,7 @@ public class CommentController {
     }
 
     @PostMapping("/savecomment")
-    public String saveComment(
+    public String postSaveComment(
             @RequestParam("id") long id,
             @RequestParam("text") String text,
             @RequestParam("bookid") long bookId,
@@ -74,19 +74,19 @@ public class CommentController {
         List<Comment> comments = repository.findByBookId(bookId);
         model.addAttribute("comments", comments);
         model.addAttribute("bookid", comment.getBook().getId() );
-        return "listComments";
+        return "redirect:/commentsbook";
     }
 
 
     @PostMapping("/deletecomment")
-    public String deleteComment(@RequestParam("id") long id, Model model) throws AuthorHasBooksException {
+    public String postDeleteComment(@RequestParam("id") long id, Model model) throws AuthorHasBooksException {
         Comment comment = repository.findById(id).orElseThrow(NotFoundException::new);
         long bookId =comment.getBook().getId();
         model.addAttribute("bookid", bookId );
         repository.deleteById(id);
         List<Comment> comments = repository.findByBookId(bookId);
         model.addAttribute("comments", comments);
-        return "listComments";
+        return "redirect:/commentsbook";
     }
 
 }

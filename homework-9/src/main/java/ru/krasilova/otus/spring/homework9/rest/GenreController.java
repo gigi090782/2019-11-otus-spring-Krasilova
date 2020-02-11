@@ -26,21 +26,21 @@ public class GenreController {
     }
 
     @GetMapping("/genres")
-    public String listGenres(Model model) {
+    public String getListGenres(Model model) {
         List<Genre> genres = repository.findAll();
         model.addAttribute("genres", genres);
         return "listGenres";
     }
 
     @GetMapping("/editgenre")
-    public String editGenre(@RequestParam("id") long id, Model model) {
+    public String getEditGenre(@RequestParam("id") long id, Model model) {
         Genre genre = repository.findById(id).orElseThrow(NotFoundException::new);
         model.addAttribute("genre", genre);
         return "editGenre";
     }
 
     @GetMapping("/addgenre")
-    public String addGenre( Model model) {
+    public String getAddGenre( Model model) {
         Genre genre = new Genre("");
         model.addAttribute("genre", genre);
         return "editGenre";
@@ -48,7 +48,7 @@ public class GenreController {
 
 
     @PostMapping("/savegenre")
-    public String saveGenre(
+    public String postSaveGenre(
             @RequestParam("id") long id,
             @RequestParam("name") String name,
             Model model
@@ -66,12 +66,12 @@ public class GenreController {
 
         List<Genre> genres = repository.findAll();
         model.addAttribute("genres", genres);
-        return "listGenres";
+        return "redirect:/genres";
     }
 
 
     @PostMapping("/deletegenre")
-    public String deleteGenre(@RequestParam("id") long id, Model model) throws GenreHasBooksException {
+    public String postDeleteGenre(@RequestParam("id") long id, Model model) throws GenreHasBooksException {
         if (bookRepository.existsByGenreId(id)) {
             throw new GenreHasBooksException("У данного жанра есть книги, удаление невозможно!");
         }
@@ -79,7 +79,7 @@ public class GenreController {
         repository.deleteById(id);
         List<Genre> genres = repository.findAll();
         model.addAttribute("genres", genres);
-        return "listGenres";
+        return "redirect:/genres";
     }
 
 

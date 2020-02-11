@@ -27,21 +27,21 @@ public class AuthorController {
     }
 
     @GetMapping("/authors")
-    public String listAuthors(Model model) {
+    public String getListAuthors(Model model) {
         List<Author> authors = repository.findAll();
         model.addAttribute("authors", authors);
         return "listAuthors";
     }
 
     @GetMapping("/editauthor")
-    public String editAuthor(@RequestParam("id") long id, Model model) {
+    public String getEditAuthor(@RequestParam("id") long id, Model model) {
         Author author = repository.findById(id).orElseThrow(NotFoundException::new);
         model.addAttribute("author", author);
         return "editAuthor";
     }
 
     @GetMapping("/addauthor")
-    public String addComment(Model model) throws ParseException {
+    public String getAddComment(Model model) throws ParseException {
 
         Author author = new Author("", "", "", "01.01.1960");
         model.addAttribute("author", author);
@@ -49,7 +49,7 @@ public class AuthorController {
     }
 
     @PostMapping("/saveauthor")
-    public String saveAuthor(
+    public String postSaveAuthor(
             @RequestParam("id") long id,
             @RequestParam("lastname") String lastname,
             @RequestParam("firstname") String firstname,
@@ -71,22 +71,18 @@ public class AuthorController {
         }
 
         repository.save(author);
-        List<Author> authors = repository.findAll();
-        model.addAttribute("authors", authors);
-        return "listAuthors";
+        return "redirect:/authors";
     }
 
 
     @PostMapping("/deleteauthor")
-    public String deleteAuthor(@RequestParam("id") long id, Model model) throws AuthorHasBooksException {
+    public String postDeleteAuthor(@RequestParam("id") long id, Model model) throws AuthorHasBooksException {
         if (bookRepository.existsByAuthorId(id)) {
             throw new AuthorHasBooksException("У автора есть книги, удаление невозможно!");
         }
         Author author = repository.findById(id).orElseThrow(NotFoundException::new);
         repository.deleteById(id);
-        List<Author> authors = repository.findAll();
-        model.addAttribute("authors", authors);
-        return "listAuthors";
+        return "redirect:/authors";
     }
 
 }

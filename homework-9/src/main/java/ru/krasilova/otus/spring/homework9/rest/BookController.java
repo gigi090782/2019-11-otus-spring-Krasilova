@@ -13,13 +13,14 @@ import ru.krasilova.otus.spring.homework9.repositories.BookRepository;
 import ru.krasilova.otus.spring.homework9.repositories.CommentRepository;
 import ru.krasilova.otus.spring.homework9.repositories.GenreRepository;
 
-
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import java.text.ParseException;
 import java.util.List;
 
 @Controller
-@Transactional
+
 public class BookController {
 
     private final BookRepository repository;
@@ -37,14 +38,14 @@ public class BookController {
     }
 
     @GetMapping("/")
-    public String listBook(Model model) {
+    public String getListBook(Model model) {
         List<Book> books = repository.findAll();
         model.addAttribute("books", books);
         return "listBooks";
     }
 
     @GetMapping("/editbook")
-    public String editBook(@RequestParam("id") long id, Model model) {
+    public String getEditBook(@RequestParam("id") long id, Model model) {
         Book book = repository.findById(id).orElseThrow(NotFoundException::new);
         model.addAttribute("book", book);
         List<Author> authors = authorRepository.findAll();
@@ -55,8 +56,8 @@ public class BookController {
     }
 
 
-    @PostMapping("/addbook")
-    public String addBook( Model model) throws ParseException {
+    @GetMapping("/addbook")
+    public String getAddBook( Model model) throws ParseException {
         Book book = new Book();
         model.addAttribute("book", book);
         List<Author> authors = authorRepository.findAll();
@@ -67,18 +68,16 @@ public class BookController {
     }
 
     @PostMapping("/deletebook")
-    public String deleteBook(@RequestParam("id") long id, Model model) {
+    public String postDeleteBook(@RequestParam("id") long id, Model model) {
         Book book = repository.findById(id).orElseThrow(NotFoundException::new);
         commentRepository.deleteAllByBookId(id);
         repository.deleteById(id);
-        List<Book> books = repository.findAll();
-        model.addAttribute("books", books);
-        return "listBooks";
+        return "redirect:/";
     }
 
 
     @PostMapping("/saveBook")
-    public String saveBook(
+    public String postSaveBook(
             @RequestParam("id") long id,
             @RequestParam("name") String name,
             @RequestParam("genre") Genre genre,
@@ -99,8 +98,6 @@ public class BookController {
         }
 
         repository.save(book);
-        List<Book> books = repository.findAll();
-        model.addAttribute("books", books);
-        return "listBooks";
+        return "redirect:/";
     }
 }
