@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all authors</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .authors, .authors td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+        a:link  {
+            color: #008000;
+            text-decoration:underline;
+
+        }
+        a:hover {
+            color: #800000;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h1>Список авторов в библиотеке:</h1>
+
+<table class="authors">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Фамилия</th>
+        <th>Имя</th>
+        <th>Отчество</th>
+        <th>Дата рождения</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="author : ${authors}" th:object="${author}">
+        <td th:text="*{id}">1</td>
+        <td th:text="*{getLastName()}">LastName</td>
+        <td th:text="*{getFirstName()}">FirstName</td>
+        <td th:text="*{getSecondName()}">SecondName</td>
+        <td th:text="*{getBirthDate()}">BirthDate</td>
+        <td>
+            <a th:href="@{/editauthor(id=*{getId()})}" href="editAuthor.html">Редактировать</a>
+        </td>
+        <td>
+            <form th:action="@{/deleteauthor}" method="post" action="listAuthors.html">
+                <input type="hidden" name="id" th:value="*{getId()}">
+                <a onclick="$(this).closest('form').submit()">Удалить</a>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<form id="addauthor" th:action="@{/addauthor}" action="editAuthor.html">
+    <button type="submit">Добавить автора</button>
+</form>
+<form id="listbooks" th:action="@{/}" action="listBooks.html">
+    <button type="submit">Вернуться к списку книг</button>
+</form>
+
+</body>
+</html>
