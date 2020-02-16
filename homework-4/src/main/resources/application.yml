@@ -1,6 +1,0 @@
-config:
-  locale : ru_RU
-answers:
-  count_to_ok : 3
-filepath:
-  pattern : questions%s.csv

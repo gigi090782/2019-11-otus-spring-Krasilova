@@ -43,7 +43,7 @@
 <a th:href="@{/}">Вернуться к списку книг</a>
 <script>
     $(function () {
-        $.get('/api/listgenres').done(function (genres) {
+        $.get('/api/genres').done(function (genres) {
             genres.forEach(function (genre) {
                 $('tbody').append(`
                     <tr id="genre_${genre.id}">
@@ -59,11 +59,14 @@
     });
 
     function deleteGenre(id) {
-        $.post('/api/deleteGenre/', {id: id})
-            .done(function(){
+        $.ajax({
+            url: '/api/genres/'+ id,
+            type: 'DELETE',
+            success:function(){
                 $('#genre_'+id).remove();
-            })
-            .fail(function(){alert('Что-то пошло не так!');});
+            },
+            error:function(){alert('Что-то пошло не так!');}
+        });
     }
 
 </script>
