@@ -23,14 +23,14 @@ import ru.krasilova.otus.spring.homework11.repositories.GenreRepository;
 
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(controllers = GenreRestController.class)
-@Import(LibraryApplication.class)
+
 @DisplayName("RestController для работы с жанрами (web) должно")
 public class GenreRestControllerWebTest {
     @MockBean
-    GenreRepository repository;
+    private GenreRepository repository;
 
     @MockBean
-    BookRepository bookRepository;
+    private BookRepository bookRepository;
 
 
     @Autowired

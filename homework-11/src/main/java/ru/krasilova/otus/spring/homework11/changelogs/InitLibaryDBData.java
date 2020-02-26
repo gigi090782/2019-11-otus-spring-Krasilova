@@ -45,8 +45,8 @@ public class InitLibaryDBData {
         database.drop();
     }
 
-    @ChangeSet(order = "001", id = "initKnowledges", author = "gigi", runAlways = true)
-    public void initKnowledges(MongoTemplate template) {
+    @ChangeSet(order = "001", id = "initGenres", author = "gigi", runAlways = true)
+    public void initGenres(MongoTemplate template) {
         genreNovel = template.save(new Genre("Роман"));
         genreDetective = template.save(new Genre("Детектив"));
         template.save(new Genre("Фантастика"));

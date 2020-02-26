@@ -45,9 +45,9 @@ public class CommentRestController {
     public Mono<ResponseEntity<Void>> deleteCommentById(@PathVariable("id") String id) {
 
 
-        return repository.findById(id)
+        return repository.existsById(id)
                 .flatMap(existingComment ->
-                        repository.delete(existingComment)
+                        repository.deleteById(id)
                                 .then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK)))
                 )
                 .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));

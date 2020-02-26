@@ -45,11 +45,11 @@ public class BookRestController {
     @DeleteMapping("/api/books/{id}")
     public Mono<ResponseEntity<Void>> deleteBookById(@PathVariable("id") String id) {
 
-        return repository.findById(id)
+        return repository.existsById(id)
 
                 .flatMap(
                         existingBook ->
-                                commentRepository.existsByBookId(existingBook.getId())
+                                commentRepository.existsByBookId(id)
                 ).filter(isExist -> !isExist)
                 .flatMap(isExist ->
                         repository.deleteById(id)

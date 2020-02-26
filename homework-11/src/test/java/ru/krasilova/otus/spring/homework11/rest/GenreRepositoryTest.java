@@ -20,10 +20,10 @@ import ru.krasilova.otus.spring.homework11.repositories.GenreRepository;
 
 @ExtendWith(SpringExtension.class)
 @DataMongoTest
-@DisplayName("RestController для работы с жанрами должно")
-public class GenreRestControllerTest {
+@DisplayName("GenreRepository должен")
+public class GenreRepositoryTest {
     @Autowired
-    GenreRepository repository;
+    private  GenreRepository repository;
 
     @DisplayName("устанавливать ИД при сохранении")
     @Test
@@ -40,7 +40,7 @@ public class GenreRestControllerTest {
     @DisplayName("находить жанры по наименованию")
     @Test
     public void shouldFindByName() {
-        repository.save(new Genre("test")).subscribe();
+        repository.save(new Genre("test")).block();
 
         StepVerifier.create(
                 repository.findByName("test")
