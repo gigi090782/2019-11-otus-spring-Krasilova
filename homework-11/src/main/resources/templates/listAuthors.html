@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all authors</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .authors, .authors td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+        a:link  {
+            color: #008000;
+            text-decoration:underline;
+
+        }
+        a:hover {
+            color: #800000;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h1>Список авторов в библиотеке:</h1>
+
+<table id="tableAuthors" class="authors">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Фамилия</th>
+        <th>Имя</th>
+        <th>Отчество</th>
+        <th>Дата рождения</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+</body>
+
+<script>
+    $(function () {
+        $.get('/api/authors').done(function (authors) {
+            authors.forEach(function (author) {
+                $('#tableAuthors>tbody').append(`
+                    <tr id="author_${author.id}">
+                        <td>${author.id}</td>
+                        <td>${author.lastname}</td>
+                        <td>${author.firstname}</td>
+                        <td>${author.secondname}</td>
+                        <td>${author.birthdate}</td>
+                        <td>
+                        <a onclick="deleteAuthor('${author.id}')">Удалить</a>
+                        </td>
+                    </tr>
+                `)
+            });
+        })
+    });
+
+    function deleteAuthor(id) {
+        $.ajax({
+            url: '/api/authors/'+ id,
+            type: 'DELETE',
+            success:function(){
+                $('#author_'+id).remove();
+            },
+            error:function(){alert('Что-то пошло не так!');}
+        });
+    }
+
+
+
+</script>
+</html>
