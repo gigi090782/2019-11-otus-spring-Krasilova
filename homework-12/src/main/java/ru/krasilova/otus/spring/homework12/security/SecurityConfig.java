@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ru.krasilova.otus.spring.homework12.services.UserService;
+import ru.krasilova.otus.spring.homework12.services.UserServiceImpl;
 
 
 @Configuration
@@ -25,11 +25,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return NoOpPasswordEncoder.getInstance();
     }
 
-    @Autowired
-    private UserService userDetailsService;
+
+    private final UserServiceImpl userDetailsService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public SecurityConfig(UserServiceImpl userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -43,13 +49,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/**").authenticated()
                 .and()
                 .formLogin()
-                //   .failureForwardUrl("/errorUserNotFound")
                 .and()
-                .rememberMe().userDetailsService(userDetailsService)
-        // .and()
-        //.logout()
-        //  .deleteCookies("JSESSIONID");
-
+                .rememberMe()//.userDetailsService(userDetailsService)
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .deleteCookies("JSESSIONID");
         ;
         http.rememberMe()
                 .key("MyKey")

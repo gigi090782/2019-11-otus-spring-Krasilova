@@ -85,7 +85,7 @@ public class CommentController {
         repository.deleteById(id);
         List<Comment> comments = repository.findByBookId(bookId);
         model.addAttribute("comments", comments);
-        return "redirect:/commentsbook";
+        return "redirect:/commentsbook/?id="+ String.valueOf(id);
     }
 
 }
