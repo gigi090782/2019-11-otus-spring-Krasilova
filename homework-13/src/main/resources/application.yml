@@ -1,0 +1,15 @@
+spring:
+
+    show-sql: true
+    h2:
+      console:
+        enabled: true
+    jpa:
+      hibernate:
+        ddl-auto: none
+
+
+logging:
+  level:
+    ROOT: ERROR
+
