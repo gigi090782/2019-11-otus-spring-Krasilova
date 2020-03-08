@@ -51,7 +51,7 @@
     </tr>
     </tbody>
 </table>
-<form id="addcomment" th:action="@{/addcomment}"  method="post" action="editComment.html">
+<form id="addcomment" th:action="@{/addcomment}"  method="get" action="editComment.html">
     <input type="hidden" name="bookid" th:value="${bookid}">
     <button type="submit">Добавить комментарий</button>
 </form>

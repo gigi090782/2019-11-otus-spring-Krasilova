@@ -40,7 +40,7 @@ public class AuthorController {
     }
 
     @GetMapping("/addauthor")
-    public String getAddComment(Model model) throws ParseException {
+    public String getAddAuthor(Model model) throws ParseException {
 
         Author author = new Author("", "", "", "01.01.1960");
         model.addAttribute("author", author);
