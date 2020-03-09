@@ -30,5 +30,7 @@ public interface BookRepository extends CrudRepository<Book, Long> {
     boolean existsByGenreId(long genreId);
     @PreAuthorize("hasPermission(#book, 'WRITE')")
     Book save(@Param("book")Book book);
+    @PostFilter("hasPermission(filterObject, 'READ')")
+    long count();
 }
 

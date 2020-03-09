@@ -73,7 +73,7 @@ public class CommentController {
         List<Comment> comments = repository.findByBookId(bookId);
         model.addAttribute("comments", comments);
         model.addAttribute("bookid", comment.getBook().getId() );
-        return "redirect:/commentsbook";
+        return "redirect:/commentsbook/?id="+ String.valueOf(comment.getBook().getId());
     }
 
 
@@ -85,7 +85,7 @@ public class CommentController {
         repository.deleteById(id);
         List<Comment> comments = repository.findByBookId(bookId);
         model.addAttribute("comments", comments);
-        return "redirect:/commentsbook/?id="+ String.valueOf(id);
+        return "redirect:/commentsbook/?id="+ String.valueOf(bookId);
     }
 
 }

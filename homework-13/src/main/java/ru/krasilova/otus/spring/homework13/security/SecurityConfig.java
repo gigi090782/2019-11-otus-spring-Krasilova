@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.krasilova.otus.spring.homework13.services.UserService;
 import ru.krasilova.otus.spring.homework13.services.UserServiceImpl;
 
 
@@ -26,13 +27,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    private final UserServiceImpl userDetailsService;
+    private final UserService userDetailsService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public SecurityConfig(UserServiceImpl userDetailsService) {
+    public SecurityConfig(UserService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
