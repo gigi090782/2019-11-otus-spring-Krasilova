@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.krasilova.otus.spring.homework12.services.UserService;
 
 
-
 @Configuration
 @EnableWebSecurity(debug = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -30,13 +29,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userDetailsService;
 
 
-    private final PasswordEncoder passwordEncoder;
-
     @Autowired
-    public SecurityConfig(UserService userDetailsService, PasswordEncoder passwordEncoder) {
+    public SecurityConfig(UserService userDetailsService) {
 
         this.userDetailsService = userDetailsService;
-        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -68,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(passwordEncoder);
+        provider.setPasswordEncoder(passwordEncoder());
         provider.setUserDetailsService(userDetailsService);
         return provider;
     }
