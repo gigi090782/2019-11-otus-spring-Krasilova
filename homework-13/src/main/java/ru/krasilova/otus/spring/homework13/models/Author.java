@@ -2,16 +2,13 @@ package ru.krasilova.otus.spring.homework13.models;
 
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 
-import java.util.List;
-
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -29,9 +26,7 @@ public class Author {
     @Column(name = "birthdate", nullable = false, unique = false)
     @DateTimeFormat(pattern = "dd.mm.yyyy")
     private String  birthDate;
-    @OneToMany(targetEntity = Book.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
-    private List<Book> books;
+
 
     public Author(String firstName, String secondName,String lastName,String  birthDate)
     {

@@ -12,6 +12,8 @@ import ru.krasilova.otus.spring.homework13.repositories.AuthorRepository;
 import ru.krasilova.otus.spring.homework13.repositories.BookRepository;
 import ru.krasilova.otus.spring.homework13.repositories.CommentRepository;
 import ru.krasilova.otus.spring.homework13.repositories.GenreRepository;
+import ru.krasilova.otus.spring.homework13.services.AclMyService;
+import ru.krasilova.otus.spring.homework13.services.LibraryService;
 
 import java.text.ParseException;
 import java.util.List;
@@ -24,14 +26,20 @@ public class BookController {
     private final GenreRepository genreRepository;
     private final AuthorRepository authorRepository;
     private final CommentRepository commentRepository;
+    private final LibraryService libraryService;
+    private final AclMyService aclMyService;
 
     @Autowired
     public BookController(BookRepository repository, GenreRepository genreRepository,
-                          AuthorRepository authorRepository, CommentRepository commentRepository) {
+                          AuthorRepository authorRepository, CommentRepository commentRepository,
+                          LibraryService libraryService,
+                          AclMyService aclMyService) {
         this.repository = repository;
         this.genreRepository = genreRepository;
         this.authorRepository = authorRepository;
         this.commentRepository = commentRepository;
+        this.libraryService = libraryService;
+        this.aclMyService = aclMyService;
     }
 
     //@GetMapping("/")
@@ -89,14 +97,17 @@ public class BookController {
             book.setAuthor(author);
             book.setName(name);
             book.setGenre(genre);
+            libraryService.saveBook(book);
 
         } else
         {
             book = new Book(name, author,genre);
+            book = libraryService.addNewBook(book);
+            aclMyService.addPermission(book);
 
         }
 
-        repository.save(book);
+
         return "redirect:/";
     }
 }

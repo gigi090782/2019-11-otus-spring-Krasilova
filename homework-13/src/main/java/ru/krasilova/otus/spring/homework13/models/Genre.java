@@ -1,13 +1,12 @@
 package ru.krasilova.otus.spring.homework13.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -18,9 +17,6 @@ public class Genre {
     private long id;
     @Column(name = "name", nullable = false, unique = true)
     private String name;
-    @OneToMany(targetEntity = Book.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
-    private List<Book> books;
 
     public Genre(String name) {
         this.name = name;

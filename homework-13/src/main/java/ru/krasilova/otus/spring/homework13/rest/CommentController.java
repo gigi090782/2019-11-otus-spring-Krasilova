@@ -43,7 +43,7 @@ public class CommentController {
     }
 
 
-    @GetMapping("/addcomment")
+    @PostMapping("/addcomment")
     public String getAddComment(@RequestParam("bookid") long bookId, Model model) throws ParseException {
         Book book = bookRepository.findById(bookId).orElseThrow(NotFoundException::new);
         Comment comment = new Comment("", book);

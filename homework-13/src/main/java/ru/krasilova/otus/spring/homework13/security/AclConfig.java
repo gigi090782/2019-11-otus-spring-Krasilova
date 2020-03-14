@@ -58,11 +58,11 @@ public class AclConfig {
         return new AclAuthorizationStrategyImpl(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
+
     @Bean
     public MethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler() {
         DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
-        AclPermissionEvaluator permissionEvaluator = new AclPermissionEvaluator(aclService());
-        expressionHandler.setPermissionEvaluator(permissionEvaluator);
+        expressionHandler.setPermissionEvaluator(new CustomPermissionEvaluator(aclService()));
         expressionHandler.setPermissionCacheOptimizer(new AclPermissionCacheOptimizer(aclService()));
         return expressionHandler;
     }
@@ -76,4 +76,7 @@ public class AclConfig {
     public JdbcMutableAclService aclService() {
         return new JdbcMutableAclService(dataSource, lookupStrategy(), aclCache());
     }
+
+
+
 }

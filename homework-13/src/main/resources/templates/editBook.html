@@ -47,8 +47,8 @@
         <select name = "author" id="author-select" class="select" th:field="*{author}"  >
 
             <option   th:each="aut : ${allauthors}"
-                    th:value="${aut.getId()}"
-                    th:text="(${aut.getFirstName()}+' '+${aut.getSecondName()}+' '+${aut.getLastName()})">Автор</option>
+                      th:value="${aut.getId()}"
+                      th:text="(${aut.getFirstName()}+' '+${aut.getSecondName()}+' '+${aut.getLastName()})">Автор</option>
         </select>
     </div>
     <div class="row">

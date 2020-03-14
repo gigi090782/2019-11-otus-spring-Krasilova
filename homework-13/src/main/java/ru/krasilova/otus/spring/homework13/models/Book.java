@@ -2,10 +2,13 @@ package ru.krasilova.otus.spring.homework13.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 
 @AllArgsConstructor
 @Entity
