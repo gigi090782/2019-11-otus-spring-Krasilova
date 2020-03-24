@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
+import java.util.Date;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static ru.krasilova.otus.spring.homework14.config.JobConfig.*;
@@ -47,7 +49,7 @@ class JobConfigTest {
                 .isEqualTo(IMPORT_LIBRARY_JOB_NAME);
 
         JobParameters parameters = new JobParametersBuilder()
-                .addString(OUTPUT_FILE_NAME, TEST_OUTPUT_FILE_NAME)
+                .addDate("date", new Date())
                 .toJobParameters();
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(parameters);
         assertThat(jobExecution.getExitStatus().getExitCode()).isEqualTo("COMPLETED");

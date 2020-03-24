@@ -15,12 +15,20 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.krasilova.otus.spring.homework14.config.AppProps;
+import ru.krasilova.otus.spring.homework14.models.AuthorForWrite;
+import ru.krasilova.otus.spring.homework14.models.BookForWrite;
+import ru.krasilova.otus.spring.homework14.models.CommentForWrite;
+import ru.krasilova.otus.spring.homework14.models.GenreForWrite;
 import ru.krasilova.otus.spring.homework14.repositories.AuthorRepository;
+import ru.krasilova.otus.spring.homework14.repositories.BookRepository;
+import ru.krasilova.otus.spring.homework14.repositories.CommentRepository;
+import ru.krasilova.otus.spring.homework14.repositories.GenreRepository;
 
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import static ru.krasilova.otus.spring.homework14.config.JobConfig.*;
 
@@ -28,44 +36,41 @@ import static ru.krasilova.otus.spring.homework14.config.JobConfig.*;
 @ShellComponent
 public class ShellLibraryBatchCommands {
 
-    private final AppProps appProps;
-    private final Job importUserJob;
-
+    private final Job importLibraryJob;
     private final JobLauncher jobLauncher;
-    private final JobOperator jobOperator;
     private final JobExplorer jobExplorer;
-    private final AuthorRepository repository;
-    Long executionId;
+    private final AuthorRepository authorRepository;
+    private final GenreRepository genreRepository;
+    private final BookRepository bookRepository;
+    private final CommentRepository commentRepository;
+
 
 
     @SneakyThrows
-    @ShellMethod(value = "startMigrationJobWithJobLauncher", key = "sm-jl")
+    @ShellMethod(value = "runjob", key = "rj")
     public void startMigrationJobWithJobLauncher() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+        commentRepository.deleteAll();
+        bookRepository.deleteAll();
+        genreRepository.deleteAll();
+        authorRepository.deleteAll();
 
         JobParametersBuilder builder = new JobParametersBuilder();
         builder.addDate("date", new Date());
-        builder.addString(OUTPUT_FILE_NAME, appProps.getOutputFileName());
-        JobExecution execution = jobLauncher.run(importUserJob,
+        JobExecution execution = jobLauncher.run(importLibraryJob,
                 builder.toJobParameters());
         System.out.println(execution);
+        List<AuthorForWrite> lista = authorRepository.findAll();
+        lista.forEach(a -> System.out.println(a.toString()));
+        List<GenreForWrite> listg = genreRepository.findAll();
+        listg.forEach(a -> System.out.println(a.toString()));
+        List<BookForWrite> listb = bookRepository.findAll();
+        listb.forEach(a -> System.out.println(a.toString()));
+        List<CommentForWrite> listc = commentRepository.findAll();
+        listc.forEach(a -> System.out.println(a.toString()));
+
     }
 
-    @SneakyThrows
-    @ShellMethod(value = "startMigrationJobWithJobOperator", key = "sm-jo")
-    public void startMigrationJobWithJobOperator() throws JobParametersInvalidException, JobRestartException, JobInstanceAlreadyCompleteException, NoSuchJobExecutionException, NoSuchJobException, JobExecutionNotRunningException, JobParametersNotFoundException, JobExecutionAlreadyRunningException {
 
-        if (executionId == null) {
-            executionId = jobOperator.start(IMPORT_LIBRARY_JOB_NAME,
-                    OUTPUT_FILE_NAME + "=" + appProps.getOutputFileName()
-            );
-        } else
-        {
-            executionId = jobOperator.startNextInstance(IMPORT_LIBRARY_JOB_NAME);
-
-        }
-
-        System.out.println(jobOperator.getSummary(executionId));
-    }
 
     @ShellMethod(value = "showInfo", key = "i")
     public void showInfo() {

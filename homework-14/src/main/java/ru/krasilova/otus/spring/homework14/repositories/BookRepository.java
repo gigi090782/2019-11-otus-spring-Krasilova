@@ -1,18 +1,16 @@
 package ru.krasilova.otus.spring.homework14.repositories;
 
-
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.krasilova.otus.spring.homework14.models.Book;
+import ru.krasilova.otus.spring.homework14.models.BookForWrite;
 
 import java.util.List;
 
+public interface BookRepository extends JpaRepository<BookForWrite, Long> {
+    BookForWrite findById(long id);
+    BookForWrite findByName(String name);
+    List<BookForWrite> findAll();
+    void deleteAll();
 
-public interface BookRepository extends MongoRepository<Book, String> {
-
-    List<Book> findAll();
-    List<Book> findAllByAuthorId(String id);
-    List<Book> findAllByAuthorLastName(String lastName);
-    List<Book> findAllByGenreName(String genreName);
-    boolean existsByAuthorId(String authorId);
 
 }

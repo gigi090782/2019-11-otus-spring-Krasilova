@@ -1,13 +1,14 @@
 package ru.krasilova.otus.spring.homework14.repositories;
 
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-import ru.krasilova.otus.spring.homework14.models.Comment;
+import org.springframework.data.jpa.repository.JpaRepository;
+import ru.krasilova.otus.spring.homework14.models.CommentForWrite;
 
 import java.util.List;
 
-public interface CommentRepository  extends MongoRepository<Comment, String>
+public interface CommentRepository  extends JpaRepository<CommentForWrite, String>
 {
-    List<Comment> findByBookId(String id);
-    List<Comment> findAll();
+
+    List<CommentForWrite> findAll();
+    void deleteAll();
 }
