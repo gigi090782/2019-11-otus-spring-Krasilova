@@ -13,8 +13,6 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import org.springframework.shell.standard.ShellOption;
-import ru.krasilova.otus.spring.homework14.config.AppProps;
 import ru.krasilova.otus.spring.homework14.models.AuthorForWrite;
 import ru.krasilova.otus.spring.homework14.models.BookForWrite;
 import ru.krasilova.otus.spring.homework14.models.CommentForWrite;
@@ -25,8 +23,6 @@ import ru.krasilova.otus.spring.homework14.repositories.CommentRepository;
 import ru.krasilova.otus.spring.homework14.repositories.GenreRepository;
 
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -49,10 +45,10 @@ public class ShellLibraryBatchCommands {
     @SneakyThrows
     @ShellMethod(value = "runjob", key = "rj")
     public void startMigrationJobWithJobLauncher() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
-        commentRepository.deleteAll();
-        bookRepository.deleteAll();
-        genreRepository.deleteAll();
-        authorRepository.deleteAll();
+//        commentRepository.deleteAll();
+//        bookRepository.deleteAll();
+//        genreRepository.deleteAll();
+//        authorRepository.deleteAll();
 
         JobParametersBuilder builder = new JobParametersBuilder();
         builder.addDate("date", new Date());

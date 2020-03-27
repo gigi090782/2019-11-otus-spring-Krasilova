@@ -5,33 +5,23 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.*;
+import org.springframework.batch.core.annotation.BeforeJob;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.data.MongoItemReader;
+import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.data.builder.MongoItemReaderBuilder;
-import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
-import org.springframework.batch.item.database.ItemPreparedStatementSetter;
-import org.springframework.batch.item.database.JdbcBatchItemWriter;
-import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.FlatFileItemWriter;
-import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
-import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
-import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import ru.krasilova.otus.spring.homework14.models.*;
 import ru.krasilova.otus.spring.homework14.repositories.AuthorRepository;
 import ru.krasilova.otus.spring.homework14.repositories.BookRepository;
+import ru.krasilova.otus.spring.homework14.repositories.CommentRepository;
 import ru.krasilova.otus.spring.homework14.repositories.GenreRepository;
 
 
@@ -62,74 +52,72 @@ public class JobConfig {
 
     private final BookRepository bookRepository;
 
-    @StepScope
-    @Bean
-    public JdbcBatchItemWriter<Author> writerAuthor() {
-        JdbcBatchItemWriter<Author> writer = new JdbcBatchItemWriter<>();
-        writer.setItemSqlParameterSourceProvider(
-                new BeanPropertyItemSqlParameterSourceProvider<>());
-        writer.setSql(//"DELETE FROM authors;" +
-                " INSERT INTO authors " +
-                " (firstname, secondname, lastname, birthdate) " +
-                " VALUES (:firstName, :secondName, :lastName, :birthDate)");
-        writer.setDataSource(dataSource);
-        return writer;
+    private final CommentRepository commentRepository;
+
+
+    @BeforeJob
+    public void beforeJob(JobExecution jobExecution) {
+        commentRepository.deleteAll();
+        bookRepository.deleteAll();
+        genreRepository.deleteAll();
+        authorRepository.deleteAll();
     }
 
 
     @StepScope
     @Bean
-    public JdbcBatchItemWriter<Genre> writerGenre() {
-        JdbcBatchItemWriter<Genre> writer = new JdbcBatchItemWriter<>();
-        writer.setItemSqlParameterSourceProvider(
-                new BeanPropertyItemSqlParameterSourceProvider<>());
-        writer.setSql(//"DELETE FROM genres;" +
-                " INSERT INTO genres " +
-                " (name) " +
-                " VALUES (:name)");
-        writer.setDataSource(dataSource);
-        return writer;
+    RepositoryItemWriter<AuthorForWrite> writerAuthor() {
+
+        RepositoryItemWriter<AuthorForWrite> repositoryItemWriter = new RepositoryItemWriter<>();
+        repositoryItemWriter.setRepository(authorRepository);
+        repositoryItemWriter.setMethodName("save");
+        return repositoryItemWriter;
+
+    }
+
+    @StepScope
+    @Bean
+    RepositoryItemWriter<GenreForWrite> writerGenre() {
+
+        RepositoryItemWriter<GenreForWrite> repositoryItemWriter = new RepositoryItemWriter<>();
+        repositoryItemWriter.setRepository(genreRepository);
+        repositoryItemWriter.setMethodName("save");
+        return repositoryItemWriter;
+
     }
 
 
     @StepScope
     @Bean
-    public JdbcBatchItemWriter<BookForWrite> writerBook() {
-        JdbcBatchItemWriter<BookForWrite> writer = new JdbcBatchItemWriter<>();
-        writer.setItemSqlParameterSourceProvider(
-                new BeanPropertyItemSqlParameterSourceProvider<>());
-        writer.setSql(//"DELETE FROM books;" +
-                " INSERT INTO books " +
-                " (name, author_id, genre_id) " +
-                " VALUES (:name, :author_id, :genre_id)");
-        writer.setDataSource(dataSource);
-        return writer;
+    RepositoryItemWriter<BookForWrite> writerBook() {
+
+        RepositoryItemWriter<BookForWrite> repositoryItemWriter = new RepositoryItemWriter<>();
+        repositoryItemWriter.setRepository(bookRepository);
+        repositoryItemWriter.setMethodName("save");
+        return repositoryItemWriter;
     }
 
     @StepScope
     @Bean
-    public JdbcBatchItemWriter<CommentForWrite> writerComment() {
-        JdbcBatchItemWriter<CommentForWrite> writer = new JdbcBatchItemWriter<>();
-        writer.setItemSqlParameterSourceProvider(
-                new BeanPropertyItemSqlParameterSourceProvider<>());
-        writer.setSql(//"DELETE FROM comments;" +
-                " INSERT INTO comments " +
-                " (text, book_id) " +
-                " VALUES (:text, :book_id)");
-        writer.setDataSource(dataSource);
-        return writer;
+    RepositoryItemWriter<CommentForWrite> writerComment() {
+
+        RepositoryItemWriter<CommentForWrite> repositoryItemWriter = new RepositoryItemWriter<>();
+        repositoryItemWriter.setRepository(commentRepository);
+        repositoryItemWriter.setMethodName("save");
+        return repositoryItemWriter;
+    }
+
+
+    @StepScope
+    @Bean
+    public ItemProcessor<Author, AuthorForWrite> processorAuthor() {
+        return author -> (new AuthorForWrite(author.getFirstName(), author.getSecondName(), author.getLastName(), author.getBirthDate()));
     }
 
     @StepScope
     @Bean
-    public ItemProcessor<Author, Author> processorAuthor() {
-        return author -> author;
-    }
-
-    @StepScope
-    @Bean
-    public ItemProcessor<Genre, Genre> processorGenre() {
-        return genre -> genre;
+    public ItemProcessor<Genre, GenreForWrite> processorGenre() {
+        return genre -> (new GenreForWrite(genre.getName()));
     }
 
     @StepScope
@@ -210,6 +198,21 @@ public class JobConfig {
     public Job importLibraryJob(Step stepAuthor, Step stepGenre, Step stepBook, Step stepComment) {
         return jobBuilderFactory.get(IMPORT_LIBRARY_JOB_NAME)
                 .incrementer(new RunIdIncrementer())
+                .listener(new JobExecutionListener() {
+                    @Override
+                    public void beforeJob(JobExecution jobExecution) {
+                        logger.info("Начало очистки таблиц");
+                        commentRepository.deleteAll();
+                        bookRepository.deleteAll();
+                        genreRepository.deleteAll();
+                        authorRepository.deleteAll();
+                    }
+
+                    @Override
+                    public void afterJob(JobExecution jobExecution) {
+                        logger.info("Конец очистки таблиц");
+                    }
+                })
                 .start(stepAuthor)
                 .next(stepGenre)
                 .next(stepBook)
@@ -230,9 +233,9 @@ public class JobConfig {
 
     @Bean
     public Step stepAuthor
-            (JdbcBatchItemWriter<Author> writerAuthor, ItemReader<Author> readerAuthor, ItemProcessor<Author, Author> itemAuthorProcessor) {
+            (RepositoryItemWriter<AuthorForWrite> writerAuthor, ItemReader<Author> readerAuthor, ItemProcessor<Author, AuthorForWrite> itemAuthorProcessor) {
         return stepBuilderFactory.get("stepAuthor")
-                .<Author, Author>chunk(CHUNK_SIZE)
+                .<Author, AuthorForWrite>chunk(CHUNK_SIZE)
                 .reader(readerAuthor)
                 .processor(itemAuthorProcessor)
                 .writer(writerAuthor)
@@ -240,9 +243,9 @@ public class JobConfig {
     }
 
     @Bean
-    public Step stepGenre(JdbcBatchItemWriter<Genre> writerGenre, ItemReader<Genre> readerGenre, ItemProcessor<Genre, Genre> itemGenreProcessor) {
+    public Step stepGenre(RepositoryItemWriter<GenreForWrite> writerGenre, ItemReader<Genre> readerGenre, ItemProcessor<Genre, GenreForWrite> itemGenreProcessor) {
         return stepBuilderFactory.get("step2")
-                .<Genre, Genre>chunk(CHUNK_SIZE)
+                .<Genre, GenreForWrite>chunk(CHUNK_SIZE)
                 .reader(readerGenre)
                 .processor(itemGenreProcessor)
                 .writer(writerGenre)
@@ -250,7 +253,7 @@ public class JobConfig {
     }
 
     @Bean
-    public Step stepBook(JdbcBatchItemWriter<BookForWrite> writerBook, ItemReader<Book> readerBook, ItemProcessor<Book, BookForWrite> itemBookProcessor) {
+    public Step stepBook(RepositoryItemWriter<BookForWrite> writerBook, ItemReader<Book> readerBook, ItemProcessor<Book, BookForWrite> itemBookProcessor) {
         return stepBuilderFactory.get("stepBook")
                 .<Book, BookForWrite>chunk(CHUNK_SIZE)
                 .reader(readerBook)
@@ -260,7 +263,7 @@ public class JobConfig {
     }
 
     @Bean
-    public Step stepComment(JdbcBatchItemWriter<CommentForWrite> writerComment, ItemReader<Comment> readerComment, ItemProcessor<Comment, CommentForWrite> itemCommentProcessor) {
+    public Step stepComment(RepositoryItemWriter<CommentForWrite> writerComment, ItemReader<Comment> readerComment, ItemProcessor<Comment, CommentForWrite> itemCommentProcessor) {
         return stepBuilderFactory.get("stepComment")
                 .<Comment, CommentForWrite>chunk(CHUNK_SIZE)
                 .reader(readerComment)
