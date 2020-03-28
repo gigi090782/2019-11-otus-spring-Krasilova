@@ -55,15 +55,6 @@ public class JobConfig {
     private final CommentRepository commentRepository;
 
 
-    @BeforeJob
-    public void beforeJob(JobExecution jobExecution) {
-        commentRepository.deleteAll();
-        bookRepository.deleteAll();
-        genreRepository.deleteAll();
-        authorRepository.deleteAll();
-    }
-
-
     @StepScope
     @Bean
     RepositoryItemWriter<AuthorForWrite> writerAuthor() {
@@ -198,21 +189,6 @@ public class JobConfig {
     public Job importLibraryJob(Step stepAuthor, Step stepGenre, Step stepBook, Step stepComment) {
         return jobBuilderFactory.get(IMPORT_LIBRARY_JOB_NAME)
                 .incrementer(new RunIdIncrementer())
-                .listener(new JobExecutionListener() {
-                    @Override
-                    public void beforeJob(JobExecution jobExecution) {
-                        logger.info("Начало очистки таблиц");
-                        commentRepository.deleteAll();
-                        bookRepository.deleteAll();
-                        genreRepository.deleteAll();
-                        authorRepository.deleteAll();
-                    }
-
-                    @Override
-                    public void afterJob(JobExecution jobExecution) {
-                        logger.info("Конец очистки таблиц");
-                    }
-                })
                 .start(stepAuthor)
                 .next(stepGenre)
                 .next(stepBook)
@@ -221,6 +197,11 @@ public class JobConfig {
                     @Override
                     public void beforeJob(JobExecution jobExecution) {
                         logger.info("Начало job");
+                        commentRepository.deleteAll();
+                        bookRepository.deleteAll();
+                        genreRepository.deleteAll();
+                        authorRepository.deleteAll();
+
                     }
 
                     @Override

@@ -41,15 +41,9 @@ public class ShellLibraryBatchCommands {
     private final CommentRepository commentRepository;
 
 
-
     @SneakyThrows
     @ShellMethod(value = "runjob", key = "rj")
     public void startMigrationJobWithJobLauncher() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
-//        commentRepository.deleteAll();
-//        bookRepository.deleteAll();
-//        genreRepository.deleteAll();
-//        authorRepository.deleteAll();
-
         JobParametersBuilder builder = new JobParametersBuilder();
         builder.addDate("date", new Date());
         JobExecution execution = jobLauncher.run(importLibraryJob,
@@ -65,7 +59,6 @@ public class ShellLibraryBatchCommands {
         listc.forEach(a -> System.out.println(a.toString()));
 
     }
-
 
 
     @ShellMethod(value = "showInfo", key = "i")
