@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all genres</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .genres, .genres td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+        a:link  {
+            color: #008000;
+            text-decoration:underline;
+
+        }
+        a:hover {
+            color: #800000;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h1>Список жанров в библиотеке:</h1>
+
+<table class="genres">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Наименование</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="genre : ${genres}">
+        <td th:text="${genre.id}">1</td>
+        <td th:text="${genre.name}">Наименование жанра</td>
+        <td>
+            <a th:href="@{/editgenre(id=${genre.id})}" href="editGenre.html">Редактировать</a>
+        </td>
+        <td>
+            <form th:action="@{/deletegenre}" method="post" action="listGenres.html">
+                <input type="hidden" name="id" th:value="${genre.id}">
+                <a onclick="$(this).closest('form').submit()">Удалить</a>
+            </form>
+        </td>
+
+    </tr>
+    </tbody>
+</table>
+<form id="addgenre" th:action="@{/addgenre}" action="editGenre.html">
+    <button type="submit">Добавить жанр</button>
+</form>
+<form id="listbooks" th:action="@{/}" action="listBooks.html">
+    <button type="submit">Вернуться к списку книг</button>
+</form>
+
+</body>
+</html>
