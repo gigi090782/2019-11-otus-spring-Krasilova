@@ -20,8 +20,8 @@ WORKDIR $DIR
 
 COPY --from=0 $DIR/target/My-app-library* $DIR/
 
-RUN ln -svf /dev/stdout /var/log/nginx/access.log
-RUN ln -svf /dev/stderr /var/log/nginx/error.log
+RUN ln --symbolic --force /dev/stdout /var/log/access_log.log
+RUN ln --symbolic --force /dev/stderr /var/log/error_log.log
 
 EXPOSE 8080
 
