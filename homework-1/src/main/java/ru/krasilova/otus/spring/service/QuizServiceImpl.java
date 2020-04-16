@@ -1,26 +1,40 @@
 package ru.krasilova.otus.spring.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ru.krasilova.otus.spring.configuration.ConfigAnswers;
 import ru.krasilova.otus.spring.dao.QuestionDao;
 import ru.krasilova.otus.spring.domain.Question;
 import ru.krasilova.otus.spring.domain.Quiz;
 import ru.krasilova.otus.spring.domain.Student;
 
-
+@Service
 public class QuizServiceImpl implements QuizService {
 
     private final QuestionDao questionDao;
-    private UserInterfaceService userInterfaceService;
+    private final UserInterfaceService userInterfaceService;
+    private final MessageService messageService;
+    private final ConfigAnswers configAnswers;
 
+    @Autowired
+    public QuizServiceImpl(QuestionDao questionDao,
+                           UserInterfaceService userInterfaceService,
+                           MessageService messageService,
+                           ConfigAnswers configAnswers) {
 
-    public QuizServiceImpl(QuestionDao questionDao, UserInterfaceService userInterfaceService) {
-        this.questionDao = questionDao;
         this.userInterfaceService = userInterfaceService;
+        this.messageService = messageService;
+        this.questionDao = questionDao;
+        this.configAnswers = configAnswers;
     }
 
 
     private void registerStudent(Quiz quiz) {
         Student student = new Student();
-        student = userInterfaceService.getRegistrationStudent();
+
+
+        student = userInterfaceService.getRegistrationStudent(messageService.getMessage("question.firstname"),
+                messageService.getMessage("question.lastname"));
         quiz.setStudent(student);
     }
 
@@ -28,7 +42,7 @@ public class QuizServiceImpl implements QuizService {
 
     public void setQuestions(Quiz quiz) throws Exception {
 
-        quiz.setQuestions(questionDao.getQuestions("questionsErr.csv"));
+        quiz.setQuestions(questionDao.getQuestions());
     }
 
     @Override
@@ -44,7 +58,6 @@ public class QuizServiceImpl implements QuizService {
 
         int questionNumber = 0;
         String answerStudent;
-
         for (Question question : quiz.getQuestions()) {
             questionNumber++;
             answerStudent = userInterfaceService.askQuestion(question, questionNumber);
@@ -53,17 +66,25 @@ public class QuizServiceImpl implements QuizService {
             } else {
                 quiz.increaseWrongAnswersCount();
             }
-
         }
-
-
     }
 
     @Override
     public void showResult(Quiz quiz) {
-        System.out.println("Результаты тестирования:");
-        System.out.format("Фамилия и имя студента: %s %s \n", quiz.getStudent().getLastName(), quiz.getStudent().getFirstName());
-        System.out.format("Правильных ответов - %d, неправильных ответов - %d", quiz.getCorrectAnswersCount(), quiz.getWrongAnswersCount());
+        String result;
+        if (quiz.getCorrectAnswersCount() >= configAnswers.getCountToOk()) {
+            result = messageService.getMessage("result.ok");
+        } else {
+            result = messageService.getMessage("result.failed");
+        }
+        ;
+        Object[] formatResult = new Object[4];
+        formatResult[0] = quiz.getStudent().getLastName().toUpperCase() + " " + quiz.getStudent().getFirstName().toUpperCase();
+        formatResult[1] = quiz.getCorrectAnswersCount();
+        formatResult[2] = quiz.getWrongAnswersCount();
+        formatResult[3] = result;
+        userInterfaceService.showResult(messageService.getMessageFormat("result.show", formatResult));
+
     }
 }
 
