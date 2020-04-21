@@ -1,9 +1,0 @@
-
-spring:
-  show-sql: true
-  data:
-    rest:
-      basePath: /datarest
-
-
-

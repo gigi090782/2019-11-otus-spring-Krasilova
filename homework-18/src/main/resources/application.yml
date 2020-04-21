@@ -1,0 +1,22 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+spring:
+  application:
+    name: "library"
+  show-sql: true
+  data:
+    rest:
+      basePath: /datarest
+server:
+  port: 8080
+logging:
+  file: app.log
+
+execution:
+  isolation:
+    thread:
+      timeoutInMilliseconds: 1000
