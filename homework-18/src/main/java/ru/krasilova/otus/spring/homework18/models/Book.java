@@ -29,7 +29,8 @@ public class Book {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
-    public Book(){};
+    public Book() { } ;
+
     public Book(String name, Author author, Genre genre) {
         this.name = name;
         this.genre = genre;

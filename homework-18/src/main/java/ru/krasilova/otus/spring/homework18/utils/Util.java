@@ -3,7 +3,7 @@ package ru.krasilova.otus.spring.homework18.utils;
 import java.util.Random;
 
 public  class Util {
-    public static void GetRandomSleep() {
+    public static void getRandomSleep() {
         Random ran = new Random();
         int nxt = ran.nextInt(10);
         if (nxt < 5)

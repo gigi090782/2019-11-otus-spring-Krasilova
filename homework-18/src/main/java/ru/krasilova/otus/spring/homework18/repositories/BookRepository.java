@@ -13,14 +13,18 @@ import java.util.List;
 public interface BookRepository extends PagingAndSortingRepository<Book, Long> {
     @EntityGraph(value = "allJoin", type = EntityGraph.EntityGraphType.FETCH)
     List<Book> findAll();
-    //Book findById(long id);
+
     @EntityGraph(value = "allJoin", type = EntityGraph.EntityGraphType.FETCH)
     List<Book> findAllByAuthorId(Long id);
+
     @EntityGraph(value = "allJoin", type = EntityGraph.EntityGraphType.FETCH)
     List<Book> findAllByAuthorLastName(String lastName);
+
     @EntityGraph(value = "allJoin", type = EntityGraph.EntityGraphType.FETCH)
     List<Book> findAllByGenreName(String genreName);
+
     boolean existsByAuthorId(long authorId);
+
     boolean existsByGenreId(long genreId);
 
 }
