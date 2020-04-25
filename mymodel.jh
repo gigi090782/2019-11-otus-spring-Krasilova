@@ -1,0 +1,80 @@
+
+
+
+entity Client {
+    Id Long,
+	firstName String,
+	lastName String,
+	birthDate String,
+    dateAdd  Date
+}
+
+entity Address {
+	Id Long,
+	clientId Long,
+	addressType AddressType,
+    Value String
+}
+
+entity Contact {
+	Id Long,
+    clientId Long,
+    contactType ContactType
+	Value String
+}
+
+entity Contract {
+	Id Long,
+    clientId Long,
+    channelType ChannelType,
+	dateAdd  Date
+}
+
+entity ContractMarketPlace {
+	Id Long,
+    contractId Long,
+    marketPlaceType MarketPlaceType,
+	dateAdd  Date
+}
+
+enum MarketPlaceType {
+    FOND,OTC, Currency
+}
+
+enum AddressType {
+    Post, Registration
+}
+enum ContactType {
+    Mobile, Email
+}
+enum ChannelType {
+    VSP, ONLINE
+}
+
+relationship OneToMany {
+	Client to Address{clientId}
+}
+
+relationship OneToMany {
+   Client to Contact{clientId} 
+}
+
+relationship OneToMany {
+   Client to Contract{clientId}  
+}
+
+relationship OneToMany {
+	Contract to ContractMarketPlace{contractId} 
+}
+
+// Set pagination options
+paginate Client,Contract  with pagination
+
+// Use Data Transfert Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl  
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
