@@ -61,7 +61,8 @@ public class LibraryServiceImpl  implements LibraryService {
 
 
     @Override
-    @HystrixCommand
+    @HystrixCommand(groupKey = "AuthorGroup", commandKey = "getAuthorByLastName",
+            fallbackMethod = "getReserveListAuthors")
     public List<Author> findAuthorByLastName(String lastName) {
         return authorRepository.findByLastName(lastName);
     }

@@ -17,13 +17,6 @@ import org.springframework.core.annotation.Order;
 @SpringBootApplication
 public class LibraryApplication {
 
-    @Bean
-    @Primary
-    @Order(value = Ordered.HIGHEST_PRECEDENCE)
-    public HystrixCommandAspect hystrixAspect() {
-        return new HystrixCommandAspect();
-    }
-
 
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(LibraryApplication.class);
